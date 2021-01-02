@@ -1,24 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import "@ui5/webcomponents/dist/Assets.js";
+import { ThemeProvider } from "@ui5/webcomponents-react/lib/ThemeProvider";
+import React from "react";
+import "./App.css";
+import { MyApp } from "./MyApp";
+import { HashRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HashRouter>
+      <ThemeProvider>
+        <MyApp />
+      </ThemeProvider>
+    </HashRouter>
   );
 }
 
