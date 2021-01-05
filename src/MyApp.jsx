@@ -1,5 +1,8 @@
 import React from "react";
-import { ShellBar, Avatar } from "@ui5/webcomponents-react";
+import { ShellBar, Avatar, Button } from "@ui5/webcomponents-react";
+import { SideNavigation } from "@ui5/webcomponents-react/lib/SideNavigation";
+import { SideNavigationItem } from "@ui5/webcomponents-react/lib/SideNavigationItem";
+import { SideNavigationSubItem } from "@ui5/webcomponents-react/lib/SideNavigationSubItem";
 //import "@ui5/webcomponents-icons/dist/icons/add.js";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
@@ -23,16 +26,42 @@ export function MyApp() {
     }
   };
 
+  const handleMenuIconClick = (item) => {};
+
   return (
     <>
       <ShellBar
-        logo={<img alt="logo" src="react-logo.png" />}
+        startButton={
+          <Button icon="menu" onClick={handleMenuIconClick}></Button>
+        }
         profile={<Avatar image="ui5-logo.png" />}
-        primaryTitle={"UI5 Star Wars React App"}
-        onLogoClick={handleLogoClick}
-        onMenuItemClick={handleMenuItemClick}
-        menuItems={<div></div>}
+        //primaryTitle={"UI5 Star Wars React App"}
       ></ShellBar>
+      <SideNavigation
+        className=""
+        collapsed="true"
+        fixedItems={
+          <>
+            <SideNavigationItem icon="chain-link" text="Useful Links" />
+            <SideNavigationItem icon="history" text="History" />
+          </>
+        }
+        onSelectionChange={function noRefCheck() {}}
+        slot=""
+        style={{}}
+        tooltip=""
+      >
+        <SideNavigationItem icon="home" text="Home" />
+        <SideNavigationItem expanded icon="group" text="People">
+          <SideNavigationSubItem text="From My Team" />
+          <SideNavigationSubItem text="From Other Teams" />
+        </SideNavigationItem>
+        <SideNavigationItem icon="locate-me" selected text="Locations" />
+        <SideNavigationItem icon="calendar" text="Events">
+          <SideNavigationSubItem text="Local" />
+          <SideNavigationSubItem text="Others" />
+        </SideNavigationItem>
+      </SideNavigation>
       <Switch>
         <Route path="/home" component={Home} />
         <Redirect from="/" to="/home" />
