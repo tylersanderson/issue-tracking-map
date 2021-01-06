@@ -1,5 +1,5 @@
-import React from "react";
-import { ShellBar, Avatar, Button } from "@ui5/webcomponents-react";
+import React, { useState } from "react";
+import { ShellBar, Button } from "@ui5/webcomponents-react";
 import { SideNavigation } from "@ui5/webcomponents-react/lib/SideNavigation";
 import { SideNavigationItem } from "@ui5/webcomponents-react/lib/SideNavigationItem";
 import { SideNavigationSubItem } from "@ui5/webcomponents-react/lib/SideNavigationSubItem";
@@ -13,33 +13,30 @@ import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webc
 import "@ui5/webcomponents-react/dist/Assets.js"; // Only if using the @ui5/webcomponents-react package
 
 export function MyApp() {
+  const [hideSideMenu, setHideSideMenu] = useState(true);
+
   const history = useHistory();
-  const handleLogoClick = () => {
-    history.push("./home");
-  };
 
-  const handleMenuItemClick = (item) => {
-    switch (item.detail.item.dataset.key) {
-      case "Home":
-        history.push("./home");
-        break;
-    }
+  const handleMenuIconClick = () => {
+    setHideSideMenu(!hideSideMenu);
   };
-
-  const handleMenuIconClick = (item) => {};
 
   return (
-    <>
+    <div>
       <ShellBar
         startButton={
           <Button icon="menu" onClick={handleMenuIconClick}></Button>
         }
-        profile={<Avatar image="ui5-logo.png" />}
-        //primaryTitle={"UI5 Star Wars React App"}
+        logo={<img alt="logo" src="ui5-logo.png" />}
+        onLogoClick={() => history.push("./home")}
+        //profile={<Avatar image="ui5-logo.png" />}
+        primaryTitle={"Issue Tracking Map"}
+        notificationCount={8}
+        showNotifications
       ></ShellBar>
       <SideNavigation
         className=""
-        collapsed="true"
+        collapsed={hideSideMenu}
         fixedItems={
           <>
             <SideNavigationItem icon="chain-link" text="Useful Links" />
@@ -66,6 +63,6 @@ export function MyApp() {
         <Route path="/home" component={Home} />
         <Redirect from="/" to="/home" />
       </Switch>
-    </>
+    </div>
   );
 }
