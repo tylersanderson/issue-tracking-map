@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { ShellBar, Button } from "@ui5/webcomponents-react";
+import {
+  FlexBox,
+  FlexBoxJustifyContent,
+  FlexBoxWrap,
+  Card,
+  ShellBar,
+  Button,
+} from "@ui5/webcomponents-react";
+import { spacing } from "@ui5/webcomponents-react-base";
 import { SideNavigation } from "@ui5/webcomponents-react/lib/SideNavigation";
 import { SideNavigationItem } from "@ui5/webcomponents-react/lib/SideNavigationItem";
 import { SideNavigationSubItem } from "@ui5/webcomponents-react/lib/SideNavigationSubItem";
@@ -34,35 +42,48 @@ export function MyApp() {
         notificationCount={8}
         showNotifications
       ></ShellBar>
-      <SideNavigation
-        className=""
-        collapsed={hideSideMenu}
-        fixedItems={
-          <>
-            <SideNavigationItem icon="chain-link" text="Useful Links" />
-            <SideNavigationItem icon="history" text="History" />
-          </>
-        }
-        onSelectionChange={function noRefCheck() {}}
-        slot=""
-        style={{}}
-        tooltip=""
+      <FlexBox
+      //justifyContent={FlexBoxJustifyContent.Left}
+      //wrap={FlexBoxWrap.Wrap}
+      //style={spacing.sapUiContentPadding}
       >
-        <SideNavigationItem icon="home" text="Home" />
-        <SideNavigationItem expanded icon="group" text="People">
-          <SideNavigationSubItem text="From My Team" />
-          <SideNavigationSubItem text="From Other Teams" />
-        </SideNavigationItem>
-        <SideNavigationItem icon="locate-me" selected text="Locations" />
-        <SideNavigationItem icon="calendar" text="Events">
-          <SideNavigationSubItem text="Local" />
-          <SideNavigationSubItem text="Others" />
-        </SideNavigationItem>
-      </SideNavigation>
-      <Switch>
-        <Route path="/home" component={Home} />
-        <Redirect from="/" to="/home" />
-      </Switch>
+        <SideNavigation
+          className=""
+          collapsed={hideSideMenu}
+          // fixedItems={
+          //   <>
+          //     <SideNavigationItem icon="chain-link" text="Useful Links" />
+          //     <SideNavigationItem icon="history" text="History" />
+          //   </>
+          // }
+          // onSelectionChange={function noRefCheck() {}}
+          // slot=""
+          // style={{}}
+          // tooltip=""
+        >
+          <SideNavigationItem icon="home" text="Home" />
+          <SideNavigationItem expanded icon="group" text="People">
+            <SideNavigationSubItem text="From My Team" />
+            <SideNavigationSubItem text="From Other Teams" />
+          </SideNavigationItem>
+          <SideNavigationItem icon="locate-me" selected text="Locations" />
+          <SideNavigationItem icon="calendar" text="Events">
+            <SideNavigationSubItem text="Local" />
+            <SideNavigationSubItem text="Others" />
+          </SideNavigationItem>
+        </SideNavigation>
+        <FlexBox
+          justifyContent={FlexBoxJustifyContent.Center}
+          fitContainer={true}
+          //wrap={FlexBoxWrap.Wrap}
+          //style={spacing.sapUiContentPadding}
+        >
+          <Switch>
+            <Route path="/home" component={Home} />
+            <Redirect from="/" to="/home" />
+          </Switch>
+        </FlexBox>
+      </FlexBox>
     </div>
   );
 }
