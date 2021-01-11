@@ -81,7 +81,7 @@ export function Map() {
               <MyGreatPlaceWithStick
                 lat={selectedLat}
                 lng={selectedLng}
-                text={"A"}
+                text={"1234"}
               />
             </GoogleMapReact>
           </div>

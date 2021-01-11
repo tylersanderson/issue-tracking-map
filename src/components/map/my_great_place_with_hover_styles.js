@@ -9,21 +9,21 @@ const greatPlaceStyle = {
   width: K_CIRCLE_SIZE,
   height: K_CIRCLE_SIZE + K_STICK_SIZE,
   left: -K_CIRCLE_SIZE / 2,
-  top: -K_CIRCLE_SIZE + K_STICK_SIZE,
+  top: -K_CIRCLE_SIZE - K_STICK_SIZE,
 };
 
 const greatPlaceCircleStyle = {
   position: "absolute",
-  left: 0,
-  top: 0,
+  left: 0 - 3,
+  top: 0 - 3.5,
   width: K_CIRCLE_SIZE,
   height: K_CIRCLE_SIZE,
   lineHeight: `${K_CIRCLE_SIZE}px`,
-  //border: "3px solid #f44336",
+  border: "3px solid black",
   borderRadius: K_CIRCLE_SIZE,
   backgroundColor: "white",
   textAlign: "center",
-  color: "#3f51b5",
+  color: "black",
   fontSize: 12,
   fontWeight: "bold",
   padding: 0,
@@ -34,7 +34,7 @@ const greatPlaceCircleStyle = {
 const greatPlaceCircleStyleHover = {
   ...greatPlaceCircleStyle,
   border: "3px solid #3f51b5",
-  color: "#f44336",
+  color: "blue",
 };
 
 const greatPlaceStickStyleShadow = {
@@ -53,12 +53,12 @@ const greatPlaceStickStyle = {
   top: K_CIRCLE_SIZE,
   width: K_STICK_WIDTH,
   height: K_STICK_SIZE,
-  backgroundColor: "#f44336",
+  backgroundColor: "black",
 };
 
 const greatPlaceStickStyleHover = {
   ...greatPlaceStickStyle,
-  backgroundColor: "#3f51b5",
+  backgroundColor: "blue",
 };
 
 export {
