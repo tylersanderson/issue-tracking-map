@@ -1,34 +1,7 @@
 import React, { useState } from "react";
-//import { PropTypes, Component } from "react";
-//import './Map.css';
 import GoogleMapReact from "google-map-react";
-
-import MyGreatPlaceWithStick from "./my_great_place_with_stick.jsx";
-
-import {
-  K_CIRCLE_SIZE,
-  K_STICK_SIZE,
-} from "./my_great_place_with_hover_styles.js";
-
-const AnyReactComponent = ({ text }) => (
-  <div
-    style={{
-      color: "white",
-      background: "grey",
-      padding: "15px 10px",
-      display: "inline-flex",
-      textAlign: "center",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: "100%",
-      transform: "translate(-50%, -50%)",
-    }}
-  >
-    {text}
-  </div>
-);
-
-const Wrapper = ({ text }) => <div>{text}</div>;
+import MarkerWithStick from "./marker.jsx";
+import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
 
 export function Map() {
   const [selectedLat, setSelectedLat] = useState([]);
@@ -38,7 +11,6 @@ export function Map() {
     const x = markerPos.x;
     // because of marker non symmetric,
     // we transform it central point to measure distance from marker circle center
-    // you can change distance function to any other distance measure
     const y = markerPos.y - K_STICK_SIZE - K_CIRCLE_SIZE / 2;
 
     // and i want that hover probability on markers with text === 'A' be greater than others
@@ -47,7 +19,6 @@ export function Map() {
     // this is really visible on small zoom values or if there are a lot of markers on the map
     const distanceKoef = markerProps.text !== "A" ? 1.5 : 1;
 
-    // it's just a simple example, you can tweak distance function as you wish
     return (
       distanceKoef *
       Math.sqrt(
@@ -57,7 +28,6 @@ export function Map() {
     );
   };
 
-  //const { ordernumber, orderlat, orderlong } = this.props;
   return (
     // Important! Always set the container height explicitly
     <div>
@@ -78,7 +48,7 @@ export function Map() {
                 setSelectedLng(lng);
               }}
             >
-              <MyGreatPlaceWithStick
+              <MarkerWithStick
                 lat={selectedLat}
                 lng={selectedLng}
                 text={"1234"}

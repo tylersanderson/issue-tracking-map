@@ -2,7 +2,7 @@ const K_CIRCLE_SIZE = 30;
 const K_STICK_SIZE = 10;
 const K_STICK_WIDTH = 3;
 
-const greatPlaceStyle = {
+const markerStyle = {
   // initially any map object has left top corner at lat lng coordinates
   // it's on you to set object origin to 0,0 coordinates
   position: "absolute",
@@ -12,7 +12,7 @@ const greatPlaceStyle = {
   top: -K_CIRCLE_SIZE - K_STICK_SIZE,
 };
 
-const greatPlaceCircleStyle = {
+const markerCircleStyle = {
   position: "absolute",
   left: 0 - 3,
   top: 0 - 3.5,
@@ -31,13 +31,13 @@ const greatPlaceCircleStyle = {
   boxShadow: "0 0 0 1px white",
 };
 
-const greatPlaceCircleStyleHover = {
-  ...greatPlaceCircleStyle,
+const markerCircleStyleHover = {
+  ...markerCircleStyle,
   border: "3px solid #3f51b5",
   color: "blue",
 };
 
-const greatPlaceStickStyleShadow = {
+const markerStickStyleShadow = {
   position: "absolute",
   left: K_CIRCLE_SIZE / 2 - K_STICK_WIDTH / 2,
   top: K_CIRCLE_SIZE,
@@ -47,7 +47,7 @@ const greatPlaceStickStyleShadow = {
   boxShadow: "0 0 0 1px white",
 };
 
-const greatPlaceStickStyle = {
+const markerStickStyle = {
   position: "absolute",
   left: K_CIRCLE_SIZE / 2 - K_STICK_WIDTH / 2,
   top: K_CIRCLE_SIZE,
@@ -56,18 +56,18 @@ const greatPlaceStickStyle = {
   backgroundColor: "black",
 };
 
-const greatPlaceStickStyleHover = {
-  ...greatPlaceStickStyle,
+const markerStickStyleHover = {
+  ...markerStickStyle,
   backgroundColor: "blue",
 };
 
 export {
-  greatPlaceStyle,
-  greatPlaceCircleStyle,
-  greatPlaceCircleStyleHover,
-  greatPlaceStickStyle,
-  greatPlaceStickStyleHover,
-  greatPlaceStickStyleShadow,
+  markerStyle,
+  markerCircleStyle,
+  markerCircleStyleHover,
+  markerStickStyle,
+  markerStickStyleHover,
+  markerStickStyleShadow,
   K_CIRCLE_SIZE,
   K_STICK_SIZE,
 };

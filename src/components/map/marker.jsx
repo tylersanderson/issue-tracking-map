@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 //import shouldPureComponentUpdate from "react-pure-render/function";
 
 import {
-  greatPlaceStyle,
-  greatPlaceCircleStyle,
-  greatPlaceCircleStyleHover,
-  greatPlaceStickStyle,
-  greatPlaceStickStyleHover,
-  greatPlaceStickStyleShadow,
-} from "./my_great_place_with_hover_styles.js";
+  markerStyle,
+  markerCircleStyle,
+  markerCircleStyleHover,
+  markerStickStyle,
+  markerStickStyleHover,
+  markerStickStyleShadow,
+} from "./marker-styles.js";
 
-export default class MyGreatPlaceWithStick extends Component {
+export default class MarkerWithStick extends Component {
   static propTypes = {
     // GoogleMap pass $hover props to hovered components
     // to detect hover it uses internal mechanism, explained in x_distance_hover example
@@ -32,20 +32,20 @@ export default class MyGreatPlaceWithStick extends Component {
     const { text, zIndex } = this.props;
 
     const style = {
-      ...greatPlaceStyle,
+      ...markerStyle,
       zIndex: this.props.$hover ? 1000 : zIndex,
     };
 
     const circleStyle = this.props.$hover
-      ? greatPlaceCircleStyleHover
-      : greatPlaceCircleStyle;
+      ? markerCircleStyleHover
+      : markerCircleStyle;
     const stickStyle = this.props.$hover
-      ? greatPlaceStickStyleHover
-      : greatPlaceStickStyle;
+      ? markerStickStyleHover
+      : markerStickStyle;
 
     return (
       <div style={style}>
-        <div style={greatPlaceStickStyleShadow} />
+        <div style={markerStickStyleShadow} />
         <div style={circleStyle}>{text}</div>
         <div style={stickStyle} />
       </div>
