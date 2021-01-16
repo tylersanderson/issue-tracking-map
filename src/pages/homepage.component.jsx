@@ -13,7 +13,7 @@ import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webc
 
 import Map from "../components/map/map.component";
 
-export function Home() {
+export function HomePage() {
   useEffect(() => {}, []);
 
   return (

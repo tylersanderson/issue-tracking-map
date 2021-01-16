@@ -14,7 +14,8 @@ import { SideNavigationSubItem } from "@ui5/webcomponents-react/lib/SideNavigati
 //import "@ui5/webcomponents-icons/dist/icons/add.js";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { Home } from "./pages/home.component";
+import { HomePage } from "./pages/homepage.component";
+import { SignInAndSignUpPage } from "./pages/sign-in-and-sign-up.component";
 import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
@@ -27,6 +28,19 @@ export function MyApp() {
 
   const handleMenuIconClick = () => {
     setHideSideMenu(!hideSideMenu);
+  };
+
+  const handleMenuItemClick = (item) => {
+    switch (item.detail.item.dataset.key) {
+      case "home":
+        history.push("./home");
+        break;
+      case "signin":
+        history.push("./signin");
+        break;
+      default:
+        history.push("./home");
+    }
   };
 
   return (
@@ -56,12 +70,13 @@ export function MyApp() {
           //     <SideNavigationItem icon="history" text="History" />
           //   </>
           // }
-          // onSelectionChange={function noRefCheck() {}}
+          onSelectionChange={handleMenuItemClick}
           // slot=""
           // style={{}}
           // tooltip=""
         >
-          <SideNavigationItem icon="home" text="Home" />
+          <SideNavigationItem data-key="home" icon="home" text="Home" />
+          <SideNavigationItem data-key="signin" icon="account" text="Sign In" />
           <SideNavigationItem expanded icon="group" text="People">
             <SideNavigationSubItem text="From My Team" />
             <SideNavigationSubItem text="From Other Teams" />
@@ -79,7 +94,8 @@ export function MyApp() {
           //style={spacing.sapUiContentPadding}
         >
           <Switch>
-            <Route path="/home" component={Home} />
+            <Route path="/home" component={HomePage} />
+            <Route path="/signin" component={SignInAndSignUpPage} />
             <Redirect from="/" to="/home" />
           </Switch>
         </FlexBox>
