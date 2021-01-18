@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -20,9 +20,11 @@ import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
 import "@ui5/webcomponents-react/dist/Assets.js"; // Only if using the @ui5/webcomponents-react package
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 export function MyApp() {
   const [hideSideMenu, setHideSideMenu] = useState(true);
+  const [currentUser, setCurrentUser] = useState("Tyler");
 
   const history = useHistory();
 
@@ -38,10 +40,32 @@ export function MyApp() {
       case "signin":
         history.push("./signin");
         break;
+      case "signout":
+        auth.signOut();
+        break;
       default:
         history.push("./home");
     }
   };
+
+  useEffect(() => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot((snapShot) => {
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data(),
+          });
+        });
+      }
+
+      setCurrentUser(userAuth);
+      console.log(currentUser);
+      console.log(currentUser.displayName);
+    });
+  }, []);
 
   return (
     <div>
@@ -53,6 +77,7 @@ export function MyApp() {
         onLogoClick={() => history.push("./home")}
         //profile={<Avatar image="ui5-logo.png" />}
         primaryTitle={"Issue Tracking Map"}
+        secondaryTitle={currentUser}
         notificationCount={8}
         showNotifications
       ></ShellBar>
@@ -86,6 +111,7 @@ export function MyApp() {
             <SideNavigationSubItem text="Local" />
             <SideNavigationSubItem text="Others" />
           </SideNavigationItem>
+          <SideNavigationItem data-key="signout" icon="log" text="Sign Out" />
         </SideNavigation>
         <FlexBox
           justifyContent={FlexBoxJustifyContent.Center}
