@@ -24,7 +24,7 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 export function MyApp() {
   const [hideSideMenu, setHideSideMenu] = useState(true);
-  const [currentUser, setCurrentUser] = useState("Tyler");
+  const [currentUser, setCurrentUser] = useState();
 
   const history = useHistory();
 
@@ -62,8 +62,8 @@ export function MyApp() {
       }
 
       setCurrentUser(userAuth);
+      console.log(userAuth);
       console.log(currentUser);
-      console.log(currentUser.displayName);
     });
   }, []);
 
@@ -77,7 +77,7 @@ export function MyApp() {
         onLogoClick={() => history.push("./home")}
         //profile={<Avatar image="ui5-logo.png" />}
         primaryTitle={"Issue Tracking Map"}
-        secondaryTitle={currentUser}
+        secondaryTitle={currentUser ? currentUser.displayName : ""}
         notificationCount={8}
         showNotifications
       ></ShellBar>
@@ -101,7 +101,13 @@ export function MyApp() {
           // tooltip=""
         >
           <SideNavigationItem data-key="home" icon="home" text="Home" />
-          <SideNavigationItem data-key="signin" icon="account" text="Sign In" />
+          {currentUser ? null : (
+            <SideNavigationItem
+              data-key="signin"
+              icon="account"
+              text="Sign In"
+            />
+          )}
           <SideNavigationItem expanded icon="group" text="People">
             <SideNavigationSubItem text="From My Team" />
             <SideNavigationSubItem text="From Other Teams" />
@@ -111,7 +117,9 @@ export function MyApp() {
             <SideNavigationSubItem text="Local" />
             <SideNavigationSubItem text="Others" />
           </SideNavigationItem>
-          <SideNavigationItem data-key="signout" icon="log" text="Sign Out" />
+          {currentUser ? (
+            <SideNavigationItem data-key="signout" icon="log" text="Sign Out" />
+          ) : null}
         </SideNavigation>
         <FlexBox
           justifyContent={FlexBoxJustifyContent.Center}
