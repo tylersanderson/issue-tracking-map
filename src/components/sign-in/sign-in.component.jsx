@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -18,13 +18,31 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import { ButtonContainer } from "./sign-in.styles";
 
 export default function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [emailValueState, setEmailValueState] = useState("None");
+  const [passwordValueState, setPasswordValueState] = useState("None");
+
   useEffect(() => {}, []);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      alert("Invalid email and password combination");
+      console.log(error);
+    }
+  };
 
   return (
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}
       wrap={FlexBoxWrap.Wrap}
-      //style={spacing.sapUiContentPadding}
     >
       <Card
         heading="I already have an account"
@@ -40,19 +58,20 @@ export default function SignIn() {
               <Input
                 required={true}
                 type="Email"
-                // valueState={garageAreaSqFtValueState}
-                // onInput={(e) => {
-                //   setGarageAreaSqFt(e.target.value);
-                //}}
+                valueState={emailValueState}
+                onInput={(e) => {
+                  setEmail(e.target.value);
+                }}
               />
             </FormItem>
             <FormItem label="Password">
               <Input
                 required={true}
                 type="Password"
-                // valueState={garageAreaSqFtValueState}
-                // onInput={(e) => {
-                //   setGarageAreaSqFt(e.target.value)}};
+                valueState={passwordValueState}
+                onInput={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
             </FormItem>
           </Form>
@@ -62,7 +81,7 @@ export default function SignIn() {
           wrap={FlexBoxWrap.Wrap}
         >
           <ButtonContainer>
-            <Button onClick={signInWithGoogle}>Sign In</Button>
+            <Button onClick={handleSubmit}>Sign In</Button>
           </ButtonContainer>
           <ButtonContainer>
             <Button design="Emphasized" onClick={signInWithGoogle}>

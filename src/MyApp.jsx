@@ -129,7 +129,13 @@ export function MyApp() {
         >
           <Switch>
             <Route path="/home" component={HomePage} />
-            <Route path="/signin" component={SignInAndSignUpPage} />
+            <Route
+              exact
+              path="/signin"
+              render={() =>
+                currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
+              }
+            />
             <Redirect from="/" to="/home" />
           </Switch>
         </FlexBox>

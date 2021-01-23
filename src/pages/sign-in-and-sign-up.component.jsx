@@ -15,7 +15,6 @@ export function SignInAndSignUpPage() {
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}
       wrap={FlexBoxWrap.Wrap}
-      //style={spacing.sapUiContentPadding}
     >
       <SignIn />
       <SignUp />
