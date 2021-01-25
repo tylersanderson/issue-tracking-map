@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import BusyIndicatorComponent from "./components/busy-indicator/busy-indicator.component";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -25,6 +26,7 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 export function MyApp() {
   const [hideSideMenu, setHideSideMenu] = useState(true);
   const [currentUser, setCurrentUser] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const history = useHistory();
 
@@ -42,6 +44,9 @@ export function MyApp() {
         break;
       case "signout":
         auth.signOut();
+        break;
+      case "location":
+        history.push("./location");
         break;
       default:
         history.push("./home");
@@ -66,6 +71,10 @@ export function MyApp() {
       console.log(currentUser);
     });
   }, []);
+
+  useEffect(() => {
+    setIsLoading(false);
+  });
 
   return (
     <div>
@@ -112,7 +121,12 @@ export function MyApp() {
             <SideNavigationSubItem text="From My Team" />
             <SideNavigationSubItem text="From Other Teams" />
           </SideNavigationItem>
-          <SideNavigationItem icon="locate-me" selected text="Locations" />
+          <SideNavigationItem
+            data-key="location"
+            icon="locate-me"
+            selected
+            text="Locations"
+          />
           <SideNavigationItem icon="calendar" text="Events">
             <SideNavigationSubItem text="Local" />
             <SideNavigationSubItem text="Others" />
@@ -121,6 +135,7 @@ export function MyApp() {
             <SideNavigationItem data-key="signout" icon="log" text="Sign Out" />
           ) : null}
         </SideNavigation>
+        {isLoading ? <BusyIndicatorComponent /> : null}
         <FlexBox
           justifyContent={FlexBoxJustifyContent.Center}
           fitContainer={true}
@@ -136,6 +151,7 @@ export function MyApp() {
                 currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
               }
             />
+            <Route path="/location" component={BusyIndicatorComponent} />
             <Redirect from="/" to="/home" />
           </Switch>
         </FlexBox>
