@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BusyIndicatorComponent from "./components/busy-indicator/busy-indicator.component";
+import BusyIndicatorContext from "./contexts/busy-indicator/busy-indicator.context";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -26,7 +27,8 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 export function MyApp() {
   const [hideSideMenu, setHideSideMenu] = useState(true);
   const [currentUser, setCurrentUser] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  //const [isLoading, setIsLoading] = useState(false);
+  const [busyIndicatorVisible, setBusyIndicatorVisible] = useState(false);
 
   const history = useHistory();
 
@@ -73,89 +75,100 @@ export function MyApp() {
   }, []);
 
   useEffect(() => {
-    setIsLoading(false);
+    //busyIndicatorShow();
+    //busyIndicatorHide();
   });
 
   return (
     <div>
-      <ShellBar
-        startButton={
-          <Button icon="menu" onClick={handleMenuIconClick}></Button>
-        }
-        logo={<img alt="logo" src="ui5-logo.png" />}
-        onLogoClick={() => history.push("./home")}
-        //profile={<Avatar image="ui5-logo.png" />}
-        primaryTitle={"Issue Tracking Map"}
-        secondaryTitle={currentUser ? currentUser.displayName : ""}
-        notificationCount={8}
-        showNotifications
-      ></ShellBar>
-      <FlexBox
-      //justifyContent={FlexBoxJustifyContent.Left}
-      //wrap={FlexBoxWrap.Wrap}
-      //style={spacing.sapUiContentPadding}
-      >
-        <SideNavigation
-          className=""
-          collapsed={hideSideMenu}
-          // fixedItems={
-          //   <>
-          //     <SideNavigationItem icon="chain-link" text="Useful Links" />
-          //     <SideNavigationItem icon="history" text="History" />
-          //   </>
-          // }
-          onSelectionChange={handleMenuItemClick}
-          // slot=""
-          // style={{}}
-          // tooltip=""
-        >
-          <SideNavigationItem data-key="home" icon="home" text="Home" />
-          {currentUser ? null : (
-            <SideNavigationItem
-              data-key="signin"
-              icon="account"
-              text="Sign In"
-            />
-          )}
-          <SideNavigationItem expanded icon="group" text="People">
-            <SideNavigationSubItem text="From My Team" />
-            <SideNavigationSubItem text="From Other Teams" />
-          </SideNavigationItem>
-          <SideNavigationItem
-            data-key="location"
-            icon="locate-me"
-            selected
-            text="Locations"
-          />
-          <SideNavigationItem icon="calendar" text="Events">
-            <SideNavigationSubItem text="Local" />
-            <SideNavigationSubItem text="Others" />
-          </SideNavigationItem>
-          {currentUser ? (
-            <SideNavigationItem data-key="signout" icon="log" text="Sign Out" />
-          ) : null}
-        </SideNavigation>
-        {isLoading ? <BusyIndicatorComponent /> : null}
+      <BusyIndicatorContext.Provider value={{ busyIndicatorVisible }}>
+        <ShellBar
+          startButton={
+            <Button icon="menu" onClick={handleMenuIconClick}></Button>
+          }
+          logo={<img alt="logo" src="ui5-logo.png" />}
+          onLogoClick={() => history.push("./home")}
+          //profile={<Avatar image="ui5-logo.png" />}
+          primaryTitle={"Issue Tracking Map"}
+          secondaryTitle={currentUser ? currentUser.displayName : ""}
+          notificationCount={8}
+          showNotifications
+          onNotificationsClick={() => {
+            setBusyIndicatorVisible(!busyIndicatorVisible);
+            console.log(busyIndicatorVisible);
+          }}
+        ></ShellBar>
         <FlexBox
-          justifyContent={FlexBoxJustifyContent.Center}
-          fitContainer={true}
-          //wrap={FlexBoxWrap.Wrap}
-          //style={spacing.sapUiContentPadding}
+        //justifyContent={FlexBoxJustifyContent.Left}
+        //wrap={FlexBoxWrap.Wrap}
+        //style={spacing.sapUiContentPadding}
         >
-          <Switch>
-            <Route path="/home" component={HomePage} />
-            <Route
-              exact
-              path="/signin"
-              render={() =>
-                currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
-              }
+          <SideNavigation
+            className=""
+            collapsed={hideSideMenu}
+            // fixedItems={
+            //   <>
+            //     <SideNavigationItem icon="chain-link" text="Useful Links" />
+            //     <SideNavigationItem icon="history" text="History" />
+            //   </>
+            // }
+            onSelectionChange={handleMenuItemClick}
+            // slot=""
+            // style={{}}
+            // tooltip=""
+          >
+            <SideNavigationItem data-key="home" icon="home" text="Home" />
+            {currentUser ? null : (
+              <SideNavigationItem
+                data-key="signin"
+                icon="account"
+                text="Sign In"
+              />
+            )}
+            <SideNavigationItem expanded icon="group" text="People">
+              <SideNavigationSubItem text="From My Team" />
+              <SideNavigationSubItem text="From Other Teams" />
+            </SideNavigationItem>
+            <SideNavigationItem
+              data-key="location"
+              icon="locate-me"
+              selected
+              text="Locations"
             />
-            <Route path="/location" component={BusyIndicatorComponent} />
-            <Redirect from="/" to="/home" />
-          </Switch>
+            <SideNavigationItem icon="calendar" text="Events">
+              <SideNavigationSubItem text="Local" />
+              <SideNavigationSubItem text="Others" />
+            </SideNavigationItem>
+            {currentUser ? (
+              <SideNavigationItem
+                data-key="signout"
+                icon="log"
+                text="Sign Out"
+              />
+            ) : null}
+          </SideNavigation>
+          {busyIndicatorVisible ? <BusyIndicatorComponent /> : null}
+          <FlexBox
+            justifyContent={FlexBoxJustifyContent.Center}
+            fitContainer={true}
+            //wrap={FlexBoxWrap.Wrap}
+            //style={spacing.sapUiContentPadding}
+          >
+            <Switch>
+              <Route path="/home" component={HomePage} />
+              <Route
+                exact
+                path="/signin"
+                render={() =>
+                  currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
+                }
+              />
+              <Route path="/location" component={BusyIndicatorComponent} />
+              <Redirect from="/" to="/home" />
+            </Switch>
+          </FlexBox>
         </FlexBox>
-      </FlexBox>
+      </BusyIndicatorContext.Provider>
     </div>
   );
 }
