@@ -4,12 +4,9 @@ import BusyIndicatorContext from "./contexts/busy-indicator/busy-indicator.conte
 import {
   FlexBox,
   FlexBoxJustifyContent,
-  FlexBoxWrap,
-  Card,
   ShellBar,
   Button,
 } from "@ui5/webcomponents-react";
-import { spacing } from "@ui5/webcomponents-react-base";
 import { SideNavigation } from "@ui5/webcomponents-react/lib/SideNavigation";
 import { SideNavigationItem } from "@ui5/webcomponents-react/lib/SideNavigationItem";
 import { SideNavigationSubItem } from "@ui5/webcomponents-react/lib/SideNavigationSubItem";
@@ -17,6 +14,7 @@ import { SideNavigationSubItem } from "@ui5/webcomponents-react/lib/SideNavigati
 import { Switch, Route, Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { HomePage } from "./pages/homepage.component";
+import { ReportIssue } from "./pages/report-issue.component";
 import { SignInAndSignUpPage } from "./pages/sign-in-and-sign-up.component";
 import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
@@ -49,6 +47,15 @@ export function MyApp() {
         break;
       case "location":
         history.push("./location");
+        break;
+      case "issues":
+        history.push("./home");
+        break;
+      case "view-all-issues":
+        history.push("./home");
+        break;
+      case "report-new-issue":
+        history.push("./report-issue");
         break;
       default:
         history.push("./home");
@@ -125,9 +132,20 @@ export function MyApp() {
                 text="Sign In"
               />
             )}
-            <SideNavigationItem expanded icon="group" text="People">
-              <SideNavigationSubItem text="From My Team" />
-              <SideNavigationSubItem text="From Other Teams" />
+            <SideNavigationItem
+              expanded
+              data-key="issues"
+              icon="map"
+              text="Issues"
+            >
+              <SideNavigationSubItem
+                data-key="view-all-issues"
+                text="View All Issues"
+              />
+              <SideNavigationSubItem
+                data-key="report-new-issue"
+                text="Report New Issue"
+              />
             </SideNavigationItem>
             <SideNavigationItem
               data-key="location"
@@ -135,10 +153,6 @@ export function MyApp() {
               selected
               text="Locations"
             />
-            <SideNavigationItem icon="calendar" text="Events">
-              <SideNavigationSubItem text="Local" />
-              <SideNavigationSubItem text="Others" />
-            </SideNavigationItem>
             {currentUser ? (
               <SideNavigationItem
                 data-key="signout"
@@ -163,6 +177,7 @@ export function MyApp() {
                   currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
                 }
               />
+              <Route path="/report-issue" component={ReportIssue} />
               <Route path="/location" component={BusyIndicatorComponent} />
               <Redirect from="/" to="/home" />
             </Switch>

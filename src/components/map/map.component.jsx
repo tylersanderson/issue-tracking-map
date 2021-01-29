@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import IssueSelectedContext from "../../contexts/issue-selected/issue-selected.context";
 import GoogleMapReact from "google-map-react";
 import MarkerWithStick from "./marker.jsx";
 import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
 
-export function Map() {
+import { firestore } from "../../firebase/firebase.utils";
+
+export function Map({ issueArray, page }) {
   const [selectedLat, setSelectedLat] = useState([]);
   const [selectedLng, setSelectedLng] = useState([]);
+  const [issueList, setIssueList] = useState([]);
+  const [issueSelected, setIssueSelected] = useState([]);
 
   const distanceToMouse = (markerPos, mousePos, markerProps) => {
     const x = markerPos.x;
@@ -28,35 +33,74 @@ export function Map() {
     );
   };
 
+  const onChildClick = (key, childProps) => {
+    const markerId = childProps; //.marker.get("id");
+    console.log(markerId);
+    // const index = this.props.markers.findIndex(m => m.get('id') === markerId);
+    // if (this.props.onChildClick) {
+    //   this.props.onChildClick(index);
+    // }
+  };
+
+  // useEffect(() => {
+  //   async function fetchIssues() {
+  //     const collectionRef = await firestore.collection("issues");
+  //     const snapshot = await collectionRef.get();
+  //     const transformedCollection = await snapshot.docs.map((doc) => {
+  //       const { Description, Location } = doc.data();
+  //       return {
+  //         Description,
+  //         Location,
+  //       };
+  //     });
+  //     setIssueList(transformedCollection);
+  //   }
+  //   fetchIssues();
+  // }, []);
+  console.log(page);
+
   return (
     // Important! Always set the container height explicitly
     <div>
-      <article>
-        <main>
-          <div style={{ height: "80vh", width: "100%" }}>
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-              }}
-              defaultCenter={{ lat: 40.81, lng: -96.65 }}
-              defaultZoom={12}
-              hoverDistance={K_CIRCLE_SIZE / 2}
-              distanceToMouse={distanceToMouse}
-              onClick={({ x, y, lat, lng, event }) => {
-                console.log(x, y, lat, lng, event);
-                setSelectedLat(lat);
-                setSelectedLng(lng);
-              }}
-            >
-              <MarkerWithStick
-                lat={selectedLat}
-                lng={selectedLng}
-                text={"1234"}
-              />
-            </GoogleMapReact>
-          </div>
-        </main>
-      </article>
+      <IssueSelectedContext.Provider value={{ issueSelected }}>
+        <article>
+          <main>
+            <div style={{ height: "80vh", width: "100%" }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+                }}
+                defaultCenter={{ lat: 40.81, lng: -96.65 }}
+                defaultZoom={12}
+                hoverDistance={K_CIRCLE_SIZE / 2}
+                distanceToMouse={distanceToMouse}
+                //onChildClick={onChildClick}
+                onClick={({ x, y, lat, lng, event }) => {
+                  console.log(x, y, lat, lng, event);
+                  setSelectedLat(lat);
+                  setSelectedLng(lng);
+                }}
+              >
+                {page === "reportIssuePage" ? (
+                  <MarkerWithStick
+                    lat={selectedLat}
+                    lng={selectedLng}
+                    text={"New"}
+                  />
+                ) : null}
+                {issueArray.map((issue, i) => (
+                  <MarkerWithStick
+                    key={i}
+                    lat={issueArray[i].Location.latitude}
+                    lng={issueArray[i].Location.longitude}
+                    text={String(i)}
+                  />
+                ))}
+              </GoogleMapReact>
+            </div>
+          </main>
+        </article>
+      </IssueSelectedContext.Provider>
     </div>
   );
 }

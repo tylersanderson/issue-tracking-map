@@ -15,7 +15,7 @@ import { firestore } from "../firebase/firebase.utils";
 
 import Map from "../components/map/map.component";
 
-export function HomePage() {
+export function ReportIssue() {
   const [issueList, setIssueList] = useState([]);
 
   useEffect(() => {
@@ -40,8 +40,8 @@ export function HomePage() {
       wrap={FlexBoxWrap.Wrap}
       style={spacing.sapUiContentPadding}
     >
-      <Card heading={"View All Issues"}>
-        <Map issueArray={issueList}></Map>
+      <Card heading={"Report New Issue"}>
+        <Map issueArray={issueList} page={"reportIssuePage"}></Map>
       </Card>
       <ProductSwitch></ProductSwitch>
     </FlexBox>

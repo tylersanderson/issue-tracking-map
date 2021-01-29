@@ -24,10 +24,6 @@ export default class MarkerWithStick extends Component {
 
   //shouldComponentUpdate = shouldPureComponentUpdate;
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { text, zIndex } = this.props;
 

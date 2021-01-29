@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   FlexBox,
   FlexBoxJustifyContent,
-  FlexBoxDirection,
   FlexBoxWrap,
   Card,
   Button,
@@ -36,7 +35,7 @@ export default function SignUp() {
   const validateEmail = (emailField) => {
     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-    if (reg.test(emailField) == false) {
+    if (reg.test(emailField) === false) {
       setEmailValueState("Error");
       alert("Invalid Email Address");
     } else {
