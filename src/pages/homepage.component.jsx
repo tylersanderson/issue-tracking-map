@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import IssueSelectedContext from "../contexts/issue-selected/issue-selected.context";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -17,18 +18,28 @@ import Map from "../components/map/map.component";
 
 export function HomePage() {
   const [issueList, setIssueList] = useState([]);
+  const { selectedIssue, setSelectedIssueContext } = useContext(
+    IssueSelectedContext
+  );
 
   useEffect(() => {
     async function fetchIssues() {
       const collectionRef = await firestore.collection("issues");
       const snapshot = await collectionRef.get();
-      const transformedCollection = await snapshot.docs.map((doc) => {
+      console.log(snapshot.docs[0].id);
+      console.log(snapshot.docs[0].data());
+      const transformedCollection = await snapshot.docs.map((doc, i) => {
         const { Description, Location } = doc.data();
+        const id = doc.id;
+        console.log(id);
+        console.log(doc.data());
         return {
+          id,
           Description,
           Location,
         };
       });
+      console.log(transformedCollection);
       setIssueList(transformedCollection);
     }
     fetchIssues();
@@ -40,7 +51,7 @@ export function HomePage() {
       wrap={FlexBoxWrap.Wrap}
       style={spacing.sapUiContentPadding}
     >
-      <Card heading={"View All Issues"}>
+      <Card heading={selectedIssue}>
         <Map issueArray={issueList}></Map>
       </Card>
       <ProductSwitch></ProductSwitch>
