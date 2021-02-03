@@ -16,34 +16,36 @@ import { firestore } from "../firebase/firebase.utils";
 
 import Map from "../components/map/map.component";
 
-export function HomePage() {
-  const [issueList, setIssueList] = useState([]);
+export function HomePage({ issueListArray }) {
+  //const [issueList, setIssueList] = useState([]);
   const { selectedIssue, setSelectedIssueContext } = useContext(
     IssueSelectedContext
   );
 
   useEffect(() => {
-    async function fetchIssues() {
-      const collectionRef = await firestore.collection("issues");
-      const snapshot = await collectionRef.get();
-      console.log(snapshot.docs[0].id);
-      console.log(snapshot.docs[0].data());
-      const transformedCollection = await snapshot.docs.map((doc, i) => {
-        const { Description, Location } = doc.data();
-        const id = doc.id;
-        console.log(id);
-        console.log(doc.data());
-        return {
-          id,
-          Description,
-          Location,
-        };
-      });
-      console.log(transformedCollection);
-      setIssueList(transformedCollection);
-    }
-    fetchIssues();
+    // async function fetchIssues() {
+    //   const collectionRef = await firestore.collection("issues");
+    //   const snapshot = await collectionRef.get();
+    //   console.log(snapshot.docs[0].id);
+    //   console.log(snapshot.docs[0].data());
+    //   const transformedCollection = await snapshot.docs.map((doc, i) => {
+    //     const { Description, Location } = doc.data();
+    //     const id = doc.id;
+    //     console.log(id);
+    //     console.log(doc.data());
+    //     return {
+    //       id,
+    //       Description,
+    //       Location,
+    //     };
+    //   });
+    //   console.log(transformedCollection);
+    //   setIssueList(transformedCollection);
+    // }
+    // fetchIssues();
   }, []);
+
+  console.log(issueListArray);
 
   return (
     <FlexBox
@@ -52,7 +54,7 @@ export function HomePage() {
       style={spacing.sapUiContentPadding}
     >
       <Card heading={selectedIssue}>
-        <Map issueArray={issueList}></Map>
+        <Map issueArray={issueListArray}></Map>
       </Card>
       <ProductSwitch></ProductSwitch>
     </FlexBox>
