@@ -15,6 +15,7 @@ import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webc
 import { firestore } from "../firebase/firebase.utils";
 
 import Map from "../components/map/map.component";
+import IssueInformation from "../components/issue-information/issue-information.component";
 
 export function HomePage({ issueListArray }) {
   //const [issueList, setIssueList] = useState([]);
@@ -53,9 +54,10 @@ export function HomePage({ issueListArray }) {
       wrap={FlexBoxWrap.Wrap}
       style={spacing.sapUiContentPadding}
     >
-      <Card heading={selectedIssue}>
+      <Card heading={selectedIssue} style={{ maxWidth: "600px" }}>
         <Map issueArray={issueListArray}></Map>
       </Card>
+      <IssueInformation issueArray={issueListArray} />
       <ProductSwitch></ProductSwitch>
     </FlexBox>
   );
