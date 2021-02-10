@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 const IssueSelectedContext = createContext({
   selectedIssue: undefined,
-  setSelectedIssueContext: () => {},
+  //setSelectedIssueContext: () => {},
 });
 
 export default IssueSelectedContext;

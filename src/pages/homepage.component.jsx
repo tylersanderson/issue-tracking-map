@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import IssueSelectedContext from "../contexts/issue-selected/issue-selected.context";
+import React, { useEffect, useState, useContext, memo } from "react";
+//import IssueSelectedContext from "../contexts/issue-selected/issue-selected.context";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -17,11 +17,9 @@ import { firestore } from "../firebase/firebase.utils";
 import Map from "../components/map/map.component";
 import IssueInformation from "../components/issue-information/issue-information.component";
 
-export function HomePage({ issueListArray }) {
+export function HomePage({ issueListArray, setSelectedIssueContext }) {
   //const [issueList, setIssueList] = useState([]);
-  const { selectedIssue, setSelectedIssueContext } = useContext(
-    IssueSelectedContext
-  );
+  //const { setSelectedIssueContext } = useContext(IssueSelectedContext);
 
   useEffect(() => {
     // async function fetchIssues() {
@@ -49,16 +47,12 @@ export function HomePage({ issueListArray }) {
   console.log(issueListArray);
 
   return (
-    <FlexBox
-      justifyContent={FlexBoxJustifyContent.Center}
-      wrap={FlexBoxWrap.Wrap}
-      style={spacing.sapUiContentPadding}
-    >
-      <Card heading={selectedIssue} style={{ maxWidth: "600px" }}>
-        <Map issueArray={issueListArray}></Map>
-      </Card>
-      <IssueInformation issueArray={issueListArray} />
-      <ProductSwitch></ProductSwitch>
-    </FlexBox>
+    <div>
+      <Map
+        issueArray={issueListArray}
+        setSelectedIssueContext={setSelectedIssueContext}
+        HomePage={true}
+      ></Map>
+    </div>
   );
 }

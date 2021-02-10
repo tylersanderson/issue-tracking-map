@@ -21,16 +21,12 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 
 import { ButtonContainer } from "./issue-information.styles";
 
-export default function IssueInformation({ issueArray }) {
+export default function IssueInformation({ issueArray, selectedIssue }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [emailValueState, setEmailValueState] = useState("None");
   const [passwordValueState, setPasswordValueState] = useState("None");
-
-  const { selectedIssue, setSelectedIssueContext } = useContext(
-    IssueSelectedContext
-  );
 
   useEffect(() => {}, []);
 
