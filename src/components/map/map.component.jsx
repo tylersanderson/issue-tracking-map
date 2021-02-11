@@ -4,6 +4,7 @@ import IssueInformation from "../issue-information/issue-information.component";
 import {
   FlexBox,
   FlexBoxJustifyContent,
+  FlexBoxAlignItems,
   FlexBoxWrap,
   Card,
 } from "@ui5/webcomponents-react";
@@ -75,53 +76,68 @@ const Map = memo(({ issueArray, page }) => {
 
   return (
     // Important! Always set the container height explicitly
-    <FlexBox
-      justifyContent={FlexBoxJustifyContent.Center}
-      wrap={FlexBoxWrap.Wrap}
-      style={spacing.sapUiContentPadding}
-    >
-      <Card heading="Name" style={{ Width: "600px" }}>
-        <article>
-          <main>
-            <div style={{ height: "80vh", width: "100%" }}>
-              <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-                }}
-                defaultCenter={{ lat: 40.81, lng: -96.65 }}
-                defaultZoom={12}
-                hoverDistance={K_CIRCLE_SIZE / 2}
-                distanceToMouse={distanceToMouse}
-                onChildClick={handleSelectedIssue}
-                onClick={({ x, y, lat, lng, event }) => {
-                  console.log(x, y, lat, lng, event);
-                  setSelectedLat(lat);
-                  setSelectedLng(lng);
-                }}
-              >
-                {page === "reportIssuePage" ? (
-                  <MarkerWithStick
-                    lat={selectedLat}
-                    lng={selectedLng}
-                    text={"New"}
-                  />
-                ) : null}
-                {issueArray.map((issue, i) => (
-                  <MarkerWithStick
-                    key={i}
-                    lat={issueArray[i].Location.latitude}
-                    lng={issueArray[i].Location.longitude}
-                    text={String(i)}
-                    id={issueArray[i].id}
-                  />
-                ))}
-              </GoogleMapReact>
-            </div>
-          </main>
-        </article>
-      </Card>
-      <IssueInformation issueArray={issueList} selectedIssue={selectedIssue} />
-    </FlexBox>
+    <div style={{ width: "100%" }}>
+      <FlexBox
+        justifyContent={FlexBoxJustifyContent.Center}
+        alignItems={FlexBoxAlignItems.Stretch}
+        wrap={FlexBoxWrap.Wrap}
+        style={spacing.sapUiContentPadding}
+      >
+        <Card
+          heading="Name"
+          style={{ "max-width": "800px", ...spacing.sapUiContentPadding }}
+        >
+          <div style={{ height: "80vh", width: "100%" }}>
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+              }}
+              defaultCenter={{ lat: 40.81, lng: -96.65 }}
+              defaultZoom={12}
+              hoverDistance={K_CIRCLE_SIZE / 2}
+              distanceToMouse={distanceToMouse}
+              onChildClick={handleSelectedIssue}
+              onClick={({ x, y, lat, lng, event }) => {
+                console.log(x, y, lat, lng, event);
+                setSelectedLat(lat);
+                setSelectedLng(lng);
+              }}
+            >
+              {page === "reportIssuePage" ? (
+                <MarkerWithStick
+                  lat={selectedLat}
+                  lng={selectedLng}
+                  text={"New"}
+                />
+              ) : null}
+              {issueArray.map((issue, i) => (
+                <MarkerWithStick
+                  key={i}
+                  lat={issueArray[i].Location.latitude}
+                  lng={issueArray[i].Location.longitude}
+                  text={String(i)}
+                  id={issueArray[i].id}
+                />
+              ))}
+            </GoogleMapReact>
+          </div>
+        </Card>
+
+        <Card
+          heading="Name"
+          style={{
+            "max-width": "400px",
+            height: "50%",
+            ...spacing.sapUiContentPadding,
+          }}
+        >
+          <IssueInformation
+            issueArray={issueList}
+            selectedIssue={selectedIssue}
+          />
+        </Card>
+      </FlexBox>
+    </div>
   );
 });
 

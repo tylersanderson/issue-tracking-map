@@ -47,12 +47,10 @@ export function HomePage({ issueListArray, setSelectedIssueContext }) {
   console.log(issueListArray);
 
   return (
-    <div>
-      <Map
-        issueArray={issueListArray}
-        setSelectedIssueContext={setSelectedIssueContext}
-        HomePage={true}
-      ></Map>
-    </div>
+    <Map
+      issueArray={issueListArray}
+      setSelectedIssueContext={setSelectedIssueContext}
+      HomePage={true}
+    ></Map>
   );
 }
