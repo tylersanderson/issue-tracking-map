@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import IssueSelectedContext from "../../contexts/issue-selected/issue-selected.context";
 import {
   FlexBox,
   FlexBoxJustifyContent,

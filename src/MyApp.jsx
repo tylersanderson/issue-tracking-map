@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import BusyIndicatorComponent from "./components/busy-indicator/busy-indicator.component";
 import BusyIndicatorContext from "./contexts/busy-indicator/busy-indicator.context";
-import IssueSelectedContext from "./contexts/issue-selected/issue-selected.context";
 import IssueListContext from "./contexts/issue-list/issue-list.context";
 import {
   FlexBox,

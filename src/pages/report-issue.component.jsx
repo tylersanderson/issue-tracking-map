@@ -34,16 +34,5 @@ export function ReportIssue() {
     fetchIssues();
   }, []);
 
-  return (
-    <FlexBox
-      justifyContent={FlexBoxJustifyContent.Center}
-      wrap={FlexBoxWrap.Wrap}
-      style={spacing.sapUiContentPadding}
-    >
-      <Card heading={"Report New Issue"}>
-        <Map issueArray={issueList} page={"reportIssuePage"}></Map>
-      </Card>
-      <ProductSwitch></ProductSwitch>
-    </FlexBox>
-  );
+  return <Map issueArray={issueList} page={"ReportIssue"}></Map>;
 }
