@@ -6,7 +6,9 @@ import {
   Card,
   Button,
 } from "@ui5/webcomponents-react";
+import { NotificationListGroupItem } from "@ui5/webcomponents-react/lib/NotificationListGroupItem";
 import { NotificationListItem } from "@ui5/webcomponents-react/lib/NotificationListItem";
+import { NotificationAction } from "@ui5/webcomponents-react/lib/NotificationAction";
 import { Avatar } from "@ui5/webcomponents-react/lib/Avatar";
 import { Label } from "@ui5/webcomponents-react/lib/Label";
 import { spacing } from "@ui5/webcomponents-react-base";
@@ -21,59 +23,56 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import { ButtonContainer } from "./issue-information.styles";
 
 export default function IssueInformation({ issueArray, selectedIssue }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [emailValueState, setEmailValueState] = useState("None");
-  const [passwordValueState, setPasswordValueState] = useState("None");
-
   useEffect(() => {}, []);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      setEmail("");
-      setPassword("");
-    } catch (error) {
-      alert("Invalid email and password combination");
-      console.log(error);
-    }
-  };
-
+  console.log(issueArray);
   return (
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}
       wrap={FlexBoxWrap.Wrap}
     >
-      <NotificationListItem
-        avatar={
-          <Avatar
-            image="https://sap.github.io/ui5-webcomponents/assets/images/avatars/woman_avatar_1.png"
-            size="XS"
-          />
-        }
+      <NotificationListGroupItem
+        // actions={
+        //   <div>
+        //     <NotificationAction icon="accept" text="Accept all" />
+        //     <NotificationAction icon="message-error" text="Reject all" />
+        //   </div>
+        // }
         className=""
-        footnotes={
-          <>
-            <Label>{selectedIssue}</Label>
-            <Label>2 Days</Label>
-          </>
-        }
-        heading="New order (#2525) With a very long title - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor, nec elementum lectus turpis at nunc."
-        onClose={function noRefCheck() {}}
+        heading="Issue List"
+        //onClose={function noRefCheck() {}}
+        onToggle={function noRefCheck() {}}
+        showClose={false}
+        showCounter
         slot=""
-        style={{
-          width: "600px",
-        }}
+        style={{}}
         tooltip=""
       >
-        And with a very long description and long labels of the action buttons -
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
-        feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor,
-        nec elementum lectus turpis at nunc.
-      </NotificationListItem>
+        {issueArray.map((issues, i) => {
+          return (
+            <NotificationListItem
+              key={i}
+              // actions={
+              //   <div>
+              //     <NotificationAction icon="accept" text="Accept" />
+              //     <NotificationAction icon="message-error" text="Reject" />
+              //   </div>
+              // }
+              // avatar={
+              //   <Avatar
+              //     image="https://sap.github.io/ui5-webcomponents/assets/images/avatars/woman_avatar_1.png"
+              //     size="XS"
+              //   />
+              // }
+              footnotes={<div></div>}
+              heading={i}
+              priority="Medium"
+            >
+              {issueArray[i].Description}
+            </NotificationListItem>
+          );
+        })}
+      </NotificationListGroupItem>
     </FlexBox>
   );
 }

@@ -6,5 +6,5 @@ import Map from "../components/map/map.component";
 
 export function HomePage({ issueListArray }) {
   useEffect(() => {}, []);
-  return <Map issueArray={issueListArray} page={HomePage}></Map>;
+  return <Map issueArray={issueListArray} page={"HomePage"}></Map>;
 }

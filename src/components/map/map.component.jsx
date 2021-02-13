@@ -1,31 +1,22 @@
-import React, { useState, useEffect, useContext, memo } from "react";
+import React, { useState, useEffect, useContext, memo, useRef } from "react";
 import IssueInformation from "../issue-information/issue-information.component";
-import { NotificationListGroupItem } from "@ui5/webcomponents-react/lib/NotificationListGroupItem";
-import { NotificationListItem } from "@ui5/webcomponents-react/lib/NotificationListItem";
-import { NotificationAction } from "@ui5/webcomponents-react/lib/NotificationAction";
-import { Avatar } from "@ui5/webcomponents-react/lib/Avatar";
-//import { MDXCreateElement } from "@ui5/webcomponents-react/lib/MDXCreateElement";
+import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
 import {
   FlexBox,
   FlexBoxJustifyContent,
   FlexBoxAlignItems,
   FlexBoxWrap,
   Card,
+  Button,
 } from "@ui5/webcomponents-react";
 import { spacing } from "@ui5/webcomponents-react-base";
 import GoogleMapReact from "google-map-react";
 import MarkerWithStick from "./marker.jsx";
 import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
 
-import { firestore } from "../../firebase/firebase.utils";
-
-const areEqual = ({ state: prev }, { state: next }) =>
-  JSON.stringify(prev) !== JSON.stringify(next);
-
 const Map = memo(({ issueArray, page }) => {
   const [selectedLat, setSelectedLat] = useState([]);
   const [selectedLng, setSelectedLng] = useState([]);
-  const [issueList, setIssueList] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
 
   //const { setSelectedIssueContext } = useContext(IssueSelectedContext);
@@ -51,31 +42,29 @@ const Map = memo(({ issueArray, page }) => {
     );
   };
 
+  const dialogRef = useRef();
   const handleSelectedIssue = (key, childProps) => {
     const markerId = childProps; //.marker.get("id");
     console.log(markerId.id);
-    setSelectedIssue(markerId.id);
+    const issueSelected = findIssue(markerId.id, issueArray);
+    setSelectedIssue(issueSelected);
+    dialogRef.current.open();
     // const index = this.props.markers.findIndex(m => m.get('id') === markerId);
     // if (this.props.onChildClick) {
     //   this.props.onChildClick(index);
     // }
   };
 
-  // useEffect(() => {
-  //   async function fetchIssues() {
-  //     const collectionRef = await firestore.collection("issues");
-  //     const snapshot = await collectionRef.get();
-  //     const transformedCollection = await snapshot.docs.map((doc) => {
-  //       const { Description, Location } = doc.data();
-  //       return {
-  //         Description,
-  //         Location,
-  //       };
-  //     });
-  //     setIssueList(transformedCollection);
-  //   }
-  //   fetchIssues();
-  // }, []);
+  const findIssue = (issueID, issueListArray) => {
+    for (var i = 0; i < issueListArray.length; i++) {
+      if (issueListArray[i].id === issueID) {
+        return issueListArray[i];
+      }
+    }
+  };
+
+  console.log(selectedIssue);
+  console.log(page);
 
   return (
     // Important! Always set the container height explicitly
@@ -86,75 +75,14 @@ const Map = memo(({ issueArray, page }) => {
         wrap={FlexBoxWrap.Wrap}
         //style={spacing.sapUiContentPadding}
       >
-        <div style={{ width: "300px" }}>
-          <NotificationListGroupItem
-            actions={
-              <div>
-                <NotificationAction icon="accept" text="Accept all" />
-                <NotificationAction icon="message-error" text="Reject all" />
-              </div>
-            }
-            className=""
-            heading="Orders"
-            onClose={function noRefCheck() {}}
-            onToggle={function noRefCheck() {}}
-            showClose
-            showCounter
-            slot=""
-            style={{}}
-            tooltip=""
-          >
-            <NotificationListItem
-              actions={
-                <div>
-                  <NotificationAction icon="accept" text="Accept" />
-                  <NotificationAction icon="message-error" text="Reject" />
-                </div>
-              }
-              avatar={
-                <Avatar
-                  image="https://sap.github.io/ui5-webcomponents/assets/images/avatars/woman_avatar_1.png"
-                  size="XS"
-                />
-              }
-              footnotes={<div></div>}
-              heading="New order (#2525) With a very long title - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor, nec elementum lectus turpis at nunc."
-              priority="Medium"
-            >
-              And with a very long description and long labels of the action
-              buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Praesent feugiat, turpis vel scelerisque pharetra, tellus odio
-              vehicula dolor, nec elementum lectus turpis at nunc.
-            </NotificationListItem>
-            <NotificationListItem
-              actions={
-                <div>
-                  <NotificationAction icon="accept" text="Accept" />
-                  <NotificationAction icon="message-error" text="Reject" />
-                </div>
-              }
-              avatar={
-                <Avatar
-                  image="https://sap.github.io/ui5-webcomponents/assets/images/avatars/man_avatar_1.png"
-                  size="XS"
-                />
-              }
-              footnotes={<div></div>}
-              heading="New order (#2526) With a very long title - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor, nec elementum lectus turpis at nunc."
-              priority="High"
-              showClose
-            >
-              And with a very long description and long labels of the action
-              buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Praesent feugiat, turpis vel scelerisque pharetra, tellus odio
-              vehicula dolor, nec elementum lectus turpis at nunc.
-            </NotificationListItem>
-          </NotificationListGroupItem>
-        </div>
         <Card
-          heading="Name"
+          heading={
+            page === "HomePage"
+              ? "Open Issues"
+              : "Report New Issue - Select Location"
+          }
           style={{
-            "max-width": "800px",
+            "max-width": "600px",
             ...spacing.sapUiContentPadding,
           }}
         >
@@ -174,7 +102,7 @@ const Map = memo(({ issueArray, page }) => {
                 setSelectedLng(lng);
               }}
             >
-              {page === "reportIssuePage" ? (
+              {page === "ReportIssue" ? (
                 <MarkerWithStick
                   lat={selectedLat}
                   lng={selectedLng}
@@ -193,25 +121,22 @@ const Map = memo(({ issueArray, page }) => {
             </GoogleMapReact>
           </div>
         </Card>
-
-        <Card
-          heading="Name"
-          style={{
-            display: "flex",
-            "max-width": "800px",
-            //"min-width": "200px",
-
-            //flex: "0 0 auto",
-            //width: "350px",
-            height: "50%",
-            ...spacing.sapUiContentPadding,
-          }}
-        >
-          <IssueInformation
-            issueArray={issueList}
-            selectedIssue={selectedIssue}
-          />
-        </Card>
+        {page === "HomePage" ? (
+          <div style={{ width: "600px" }}>
+            <IssueInformation issueArray={issueArray} />
+          </div>
+        ) : null}
+        <div>
+          <Dialog
+            ref={dialogRef}
+            footer={
+              <Button onClick={() => dialogRef.current.close()}>Close</Button>
+            }
+            headerText="Issue Info"
+          >
+            {selectedIssue.Description}
+          </Dialog>
+        </div>
       </FlexBox>
     </div>
   );
