@@ -25,7 +25,6 @@ import { ButtonContainer } from "./issue-information.styles";
 export default function IssueInformation({ issueArray, selectedIssue }) {
   useEffect(() => {}, []);
 
-  console.log(issueArray);
   return (
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, memo, useRef } from "react";
 import IssueInformation from "../issue-information/issue-information.component";
+import IssueReportForm from "../issue-report-form/issue-report-form.component";
 import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
 import {
   FlexBox,
@@ -14,7 +15,7 @@ import GoogleMapReact from "google-map-react";
 import MarkerWithStick from "./marker.jsx";
 import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
 
-const Map = memo(({ issueArray, page }) => {
+const Map = ({ issueArray, page }) => {
   const [selectedLat, setSelectedLat] = useState([]);
   const [selectedLng, setSelectedLng] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
@@ -43,12 +44,15 @@ const Map = memo(({ issueArray, page }) => {
   };
 
   const dialogRef = useRef();
+
   const handleSelectedIssue = (key, childProps) => {
     const markerId = childProps; //.marker.get("id");
     console.log(markerId.id);
     const issueSelected = findIssue(markerId.id, issueArray);
     setSelectedIssue(issueSelected);
-    dialogRef.current.open();
+    if (page === "HomePage") {
+      dialogRef.current.open();
+    }
     // const index = this.props.markers.findIndex(m => m.get('id') === markerId);
     // if (this.props.onChildClick) {
     //   this.props.onChildClick(index);
@@ -62,9 +66,6 @@ const Map = memo(({ issueArray, page }) => {
       }
     }
   };
-
-  console.log(selectedIssue);
-  console.log(page);
 
   return (
     // Important! Always set the container height explicitly
@@ -122,24 +123,33 @@ const Map = memo(({ issueArray, page }) => {
           </div>
         </Card>
         {page === "HomePage" ? (
-          <div style={{ width: "600px" }}>
-            <IssueInformation issueArray={issueArray} />
+          <div>
+            <div style={{ width: "600px" }}>
+              <IssueInformation issueArray={issueArray} />
+            </div>
+            <div>
+              <Dialog
+                ref={dialogRef}
+                footer={
+                  <Button onClick={() => dialogRef.current.close()}>
+                    Close
+                  </Button>
+                }
+                headerText="Issue Info"
+              >
+                {selectedIssue.Description}
+              </Dialog>
+            </div>
           </div>
         ) : null}
-        <div>
-          <Dialog
-            ref={dialogRef}
-            footer={
-              <Button onClick={() => dialogRef.current.close()}>Close</Button>
-            }
-            headerText="Issue Info"
-          >
-            {selectedIssue.Description}
-          </Dialog>
-        </div>
+        {page === "ReportIssue" && selectedLat > 0 ? (
+          <div>
+            <IssueReportForm />
+          </div>
+        ) : null}
       </FlexBox>
     </div>
   );
-});
+};
 
 export default Map;

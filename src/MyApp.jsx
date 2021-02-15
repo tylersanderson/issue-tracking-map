@@ -216,7 +216,12 @@ export function MyApp() {
                     currentUser ? <Redirect to="/" /> : <SignInAndSignUpPage />
                   }
                 />
-                <Route path="/report-issue" component={ReportIssue} />
+                <Route
+                  path="/report-issue"
+                  render={() =>
+                    !currentUser ? <Redirect to="/signin" /> : <ReportIssue />
+                  }
+                />
                 <Route path="/location" component={BusyIndicatorComponent} />
                 <Redirect from="/" to="/home" />
               </Switch>
