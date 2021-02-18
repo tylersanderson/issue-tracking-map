@@ -83,7 +83,7 @@ const Map = ({ issueArray, page }) => {
               : "Report New Issue - Select Location"
           }
           style={{
-            "max-width": "600px",
+            maxWidth: "600px",
             ...spacing.sapUiContentPadding,
           }}
         >
@@ -113,8 +113,8 @@ const Map = ({ issueArray, page }) => {
               {issueArray.map((issue, i) => (
                 <MarkerWithStick
                   key={i}
-                  lat={issueArray[i].Location.latitude}
-                  lng={issueArray[i].Location.longitude}
+                  lat={issueArray[i].location.latitude}
+                  lng={issueArray[i].location.longitude}
                   text={String(i)}
                   id={issueArray[i].id}
                 />
@@ -137,14 +137,17 @@ const Map = ({ issueArray, page }) => {
                 }
                 headerText="Issue Info"
               >
-                {selectedIssue.Description}
+                {selectedIssue.description}
               </Dialog>
             </div>
           </div>
         ) : null}
         {page === "ReportIssue" && selectedLat > 0 ? (
           <div>
-            <IssueReportForm />
+            <IssueReportForm
+              selectedLat={selectedLat}
+              selectedLng={selectedLng}
+            />
           </div>
         ) : null}
       </FlexBox>

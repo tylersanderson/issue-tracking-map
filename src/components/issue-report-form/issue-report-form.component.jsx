@@ -15,11 +15,11 @@ import { TextArea } from "@ui5/webcomponents-react/lib/TextArea";
 import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
-import { auth, createUserProfileDocument } from "../../firebase/firebase.utils";
+import { createIssueDocument } from "../../firebase/firebase.utils";
 
 import { ButtonContainer } from "./issue-report-form.styles";
 
-export default function IssueReportForm() {
+export default function IssueReportForm({ selectedLat, selectedLng }) {
   const { currentUser } = useContext(CurrentUserContext);
   const [description, setDescription] = useState("");
   const [descriptionValueState, setDescriptionValueState] = useState("None");
@@ -29,9 +29,22 @@ export default function IssueReportForm() {
   useEffect(() => {}, []);
 
   const handleSubmit = async (event) => {
+    if (!currentUser) return;
+
     description == null || description === ""
       ? setDescriptionValueState("Error")
       : setDescriptionValueState("None");
+
+    try {
+      await createIssueDocument(
+        description,
+        selectedLat,
+        selectedLng,
+        currentUser.displayName
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     // try {
     //   const { user } = await auth

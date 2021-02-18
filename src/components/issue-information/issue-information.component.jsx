@@ -67,7 +67,7 @@ export default function IssueInformation({ issueArray, selectedIssue }) {
               heading={i}
               priority="Medium"
             >
-              {issueArray[i].Description}
+              {issueArray[i].description}
             </NotificationListItem>
           );
         })}

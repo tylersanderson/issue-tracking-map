@@ -74,17 +74,17 @@ export function MyApp() {
   async function fetchIssues() {
     const collectionRef = await firestore.collection("issues");
     const snapshot = await collectionRef.get();
-    console.log(snapshot.docs[0].id);
-    console.log(snapshot.docs[0].data());
+    //console.log(snapshot.docs[0].id);
+    //console.log(snapshot.docs[0].data());
     const transformedCollection = await snapshot.docs.map((doc, i) => {
-      const { Description, Location } = doc.data();
+      const { description, location } = doc.data();
       const id = doc.id;
       console.log(id);
       console.log(doc.data());
       return {
         id,
-        Description,
-        Location,
+        description,
+        location,
       };
     });
     console.log(transformedCollection);
@@ -103,7 +103,6 @@ export function MyApp() {
           });
         });
       }
-
       setCurrentUser(userAuth);
     });
     fetchIssues();

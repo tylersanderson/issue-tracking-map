@@ -15,6 +15,35 @@ const config = {
 
 firebase.initializeApp(config);
 
+export const createIssueDocument = async (
+  description,
+  selectedLatitude,
+  selectedLongitude,
+  displayName
+) => {
+  //if (!userAuth) return;
+  // const location = GeoLocation(37.7853889, -122.4056973);
+  // console.log(location);
+
+  firestore
+    .collection("issues")
+    .add({
+      description: description,
+      createdAt: new Date(),
+      createdBy: displayName,
+      location: new firebase.firestore.GeoPoint(
+        selectedLatitude,
+        selectedLongitude
+      ),
+    })
+    .then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+    });
+};
+
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
 

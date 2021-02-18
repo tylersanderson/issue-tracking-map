@@ -23,10 +23,10 @@ export function ReportIssue() {
       const collectionRef = await firestore.collection("issues");
       const snapshot = await collectionRef.get();
       const transformedCollection = await snapshot.docs.map((doc) => {
-        const { Description, Location } = doc.data();
+        const { description, location } = doc.data();
         return {
-          Description,
-          Location,
+          description,
+          location,
         };
       });
       setIssueList(transformedCollection);
