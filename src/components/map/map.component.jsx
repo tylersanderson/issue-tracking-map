@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, memo, useRef } from "react";
+import CurrentLocationContext from "../../contexts/current-location/current-location.context";
 import IssueInformation from "../issue-information/issue-information.component";
 import IssueReportForm from "../issue-report-form/issue-report-form.component";
 import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
@@ -16,10 +17,26 @@ import MarkerWithStick from "./marker.jsx";
 import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
 
 const Map = ({ issueArray, page }) => {
+  const { currentPosition } = useContext(CurrentLocationContext);
   const [selectedLat, setSelectedLat] = useState([]);
   const [selectedLng, setSelectedLng] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
+  // const [currentPosition, setCurrentPosition] = useState({});
 
+  // const success = (position) => {
+  //   const currentPosition = {
+  //     lat: position.coords.latitude,
+  //     lng: position.coords.longitude,
+  //   };
+  //   setCurrentPosition(currentPosition);
+  // };
+
+  useEffect(() => {
+    //navigator.geolocation.getCurrentPosition(success);
+  });
+
+  console.log(currentPosition);
+  console.log(selectedIssue);
   //const { setSelectedIssueContext } = useContext(IssueSelectedContext);
 
   const distanceToMouse = (markerPos, mousePos, markerProps) => {
@@ -66,6 +83,8 @@ const Map = ({ issueArray, page }) => {
       }
     }
   };
+
+  console.log(issueArray);
 
   return (
     // Important! Always set the container height explicitly
@@ -119,6 +138,13 @@ const Map = ({ issueArray, page }) => {
                   id={issueArray[i].id}
                 />
               ))}
+              {currentPosition.lat && (
+                <MarkerWithStick
+                  lat={currentPosition.lat}
+                  lng={currentPosition.lng}
+                  text={"You"}
+                />
+              )}
             </GoogleMapReact>
           </div>
         </Card>
@@ -138,6 +164,15 @@ const Map = ({ issueArray, page }) => {
                 headerText="Issue Info"
               >
                 {selectedIssue.description}
+                <br></br>
+                <br></br>
+                Reported by: {selectedIssue.createdBy}
+                <br></br>
+                <br></br>
+                Date Reported:{" "}
+                {selectedIssue.createdAt
+                  ? selectedIssue.createdAt.toDate().toDateString()
+                  : null}
               </Dialog>
             </div>
           </div>

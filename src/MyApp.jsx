@@ -3,6 +3,7 @@ import BusyIndicatorComponent from "./components/busy-indicator/busy-indicator.c
 import BusyIndicatorContext from "./contexts/busy-indicator/busy-indicator.context";
 import IssueListContext from "./contexts/issue-list/issue-list.context";
 import CurrentUserContext from "./contexts/current-user/current-user.context";
+import CurrentLocationContext from "./contexts/current-location/current-location.context";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -26,6 +27,7 @@ import {
   auth,
   createUserProfileDocument,
   firestore,
+  fetchIssues,
 } from "./firebase/firebase.utils";
 
 export function MyApp() {
@@ -35,6 +37,7 @@ export function MyApp() {
   const [busyIndicatorVisible, setBusyIndicatorVisible] = useState(false);
   const [issueList, setIssueList] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
+  const [currentPosition, setCurrentPosition] = useState({});
   const setSelectedIssueContext = (issue) => setSelectedIssue(issue);
 
   const history = useHistory();
@@ -71,25 +74,42 @@ export function MyApp() {
     }
   };
 
-  async function fetchIssues() {
-    const collectionRef = await firestore.collection("issues");
-    const snapshot = await collectionRef.get();
-    //console.log(snapshot.docs[0].id);
-    //console.log(snapshot.docs[0].data());
-    const transformedCollection = await snapshot.docs.map((doc, i) => {
-      const { description, location } = doc.data();
-      const id = doc.id;
-      console.log(id);
-      console.log(doc.data());
-      return {
-        id,
-        description,
-        location,
-      };
-    });
-    console.log(transformedCollection);
-    setIssueList(transformedCollection);
-  }
+  // async function fetchIssues() {
+  //   const collectionRef = await firestore
+  //     .collection("issues")
+  //     .where("open", "==", true);
+  //   const snapshot = await collectionRef.get();
+  //   //console.log(snapshot.docs[0].id);
+  //   //console.log(snapshot.docs[0].data());
+  //   const transformedCollection = await snapshot.docs.map((doc, i) => {
+  //     const { description, location, createdBy, createdAt } = doc.data();
+  //     const id = doc.id;
+  //     console.log(id);
+  //     console.log(doc.data());
+  //     return {
+  //       id,
+  //       description,
+  //       location,
+  //       createdBy,
+  //       createdAt,
+  //     };
+  //   });
+  //   console.log(transformedCollection);
+  //   setIssueList(transformedCollection);
+  // }
+
+  const fetchIssueList = async () => {
+    const openIssues = await fetchIssues();
+    setIssueList(openIssues);
+  };
+
+  const success = (position) => {
+    const currentPosition = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    };
+    setCurrentPosition(currentPosition);
+  };
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
@@ -105,7 +125,8 @@ export function MyApp() {
       }
       setCurrentUser(userAuth);
     });
-    fetchIssues();
+    fetchIssueList();
+    navigator.geolocation.getCurrentPosition(success);
   }, []);
 
   useEffect(() => {
@@ -116,123 +137,132 @@ export function MyApp() {
 
   return (
     <div>
-      <CurrentUserContext.Provider value={{ currentUser }}>
-        <IssueListContext.Provider value={{ issueList }}>
-          <BusyIndicatorContext.Provider value={{ busyIndicatorVisible }}>
-            <ShellBar
-              startButton={
-                <Button icon="menu" onClick={handleMenuIconClick}></Button>
-              }
-              logo={<img alt="logo" src="ui5-logo.png" />}
-              onLogoClick={() => history.push("./home")}
-              //profile={<Avatar image="ui5-logo.png" />}
-              primaryTitle={"Issue Tracking Map"}
-              secondaryTitle={currentUser ? currentUser.displayName : ""}
-              notificationCount={8}
-              showNotifications
-              onNotificationsClick={() => {
-                setBusyIndicatorVisible(!busyIndicatorVisible);
-                console.log(busyIndicatorVisible);
-              }}
-            ></ShellBar>
-            <FlexBox
-            //justifyContent={FlexBoxJustifyContent.Left}
-            //wrap={FlexBoxWrap.Wrap}
-            //style={spacing.sapUiContentPadding}
-            >
-              <SideNavigation
-                className=""
-                collapsed={hideSideMenu}
-                // fixedItems={
-                //   <>
-                //     <SideNavigationItem icon="chain-link" text="Useful Links" />
-                //     <SideNavigationItem icon="history" text="History" />
-                //   </>
-                // }
-                onSelectionChange={handleMenuItemClick}
-                // slot=""
-                // style={{}}
-                // tooltip=""
-              >
-                <SideNavigationItem data-key="home" icon="home" text="Home" />
-                {currentUser ? null : (
-                  <SideNavigationItem
-                    data-key="signin"
-                    icon="account"
-                    text="Sign In"
-                  />
-                )}
-                <SideNavigationItem
-                  expanded
-                  data-key="issues"
-                  icon="map"
-                  text="Issues"
-                >
-                  <SideNavigationSubItem
-                    data-key="view-all-issues"
-                    text="View All Issues"
-                  />
-                  <SideNavigationSubItem
-                    data-key="report-new-issue"
-                    text="Report New Issue"
-                  />
-                </SideNavigationItem>
-                <SideNavigationItem
-                  data-key="location"
-                  icon="locate-me"
-                  selected
-                  text="Locations"
-                />
-                {currentUser ? (
-                  <SideNavigationItem
-                    data-key="signout"
-                    icon="log"
-                    text="Sign Out"
-                  />
-                ) : null}
-              </SideNavigation>
-              {busyIndicatorVisible ? <BusyIndicatorComponent /> : null}
+      <CurrentLocationContext.Provider value={{ currentPosition }}>
+        <CurrentUserContext.Provider value={{ currentUser }}>
+          <IssueListContext.Provider value={{ issueList, fetchIssueList }}>
+            <BusyIndicatorContext.Provider value={{ busyIndicatorVisible }}>
+              <ShellBar
+                startButton={
+                  <Button icon="menu" onClick={handleMenuIconClick}></Button>
+                }
+                logo={<img alt="logo" src="ui5-logo.png" />}
+                onLogoClick={() => history.push("./home")}
+                //profile={<Avatar image="ui5-logo.png" />}
+                primaryTitle={"Issue Tracking Map"}
+                secondaryTitle={currentUser ? currentUser.displayName : ""}
+                notificationCount={8}
+                showNotifications
+                onNotificationsClick={() => {
+                  setBusyIndicatorVisible(!busyIndicatorVisible);
+                  console.log(busyIndicatorVisible);
+                }}
+              ></ShellBar>
               <FlexBox
-                justifyContent={FlexBoxJustifyContent.Center}
-                fitContainer={true}
-                //wrap={FlexBoxWrap.Wrap}
-                //style={spacing.sapUiContentPadding}
+              //justifyContent={FlexBoxJustifyContent.Left}
+              //wrap={FlexBoxWrap.Wrap}
+              //style={spacing.sapUiContentPadding}
               >
-                <Switch>
-                  <Route
-                    path="/home"
-                    component={() => (
-                      <HomePage
-                        issueListArray={issueList}
-                        setSelectedIssueContext={setSelectedIssueContext}
-                      />
-                    )}
+                <SideNavigation
+                  className=""
+                  collapsed={hideSideMenu}
+                  // fixedItems={
+                  //   <>
+                  //     <SideNavigationItem icon="chain-link" text="Useful Links" />
+                  //     <SideNavigationItem icon="history" text="History" />
+                  //   </>
+                  // }
+                  onSelectionChange={handleMenuItemClick}
+                  // slot=""
+                  // style={{}}
+                  // tooltip=""
+                >
+                  <SideNavigationItem data-key="home" icon="home" text="Home" />
+                  {currentUser ? null : (
+                    <SideNavigationItem
+                      data-key="signin"
+                      icon="account"
+                      text="Sign In"
+                    />
+                  )}
+                  <SideNavigationItem
+                    expanded
+                    data-key="issues"
+                    icon="map"
+                    text="Issues"
+                  >
+                    <SideNavigationSubItem
+                      data-key="view-all-issues"
+                      text="View All Issues"
+                    />
+                    <SideNavigationSubItem
+                      data-key="report-new-issue"
+                      text="Report New Issue"
+                    />
+                  </SideNavigationItem>
+                  <SideNavigationItem
+                    data-key="location"
+                    icon="locate-me"
+                    selected
+                    text="Locations"
                   />
-                  <Route
-                    exact
-                    path="/signin"
-                    render={() =>
-                      currentUser ? (
-                        <Redirect to="/" />
-                      ) : (
-                        <SignInAndSignUpPage />
-                      )
-                    }
-                  />
-                  <Route
-                    path="/report-issue"
-                    render={() =>
-                      !currentUser ? <Redirect to="/signin" /> : <ReportIssue />
-                    }
-                  />
-                  <Route path="/location" component={BusyIndicatorComponent} />
-                  <Redirect from="/" to="/home" />
-                </Switch>
+                  {currentUser ? (
+                    <SideNavigationItem
+                      data-key="signout"
+                      icon="log"
+                      text="Sign Out"
+                    />
+                  ) : null}
+                </SideNavigation>
+                {busyIndicatorVisible ? <BusyIndicatorComponent /> : null}
+                <FlexBox
+                  justifyContent={FlexBoxJustifyContent.Center}
+                  fitContainer={true}
+                  //wrap={FlexBoxWrap.Wrap}
+                  //style={spacing.sapUiContentPadding}
+                >
+                  <Switch>
+                    <Route
+                      path="/home"
+                      component={() => (
+                        <HomePage
+                          issueListArray={issueList}
+                          setSelectedIssueContext={setSelectedIssueContext}
+                        />
+                      )}
+                    />
+                    <Route
+                      exact
+                      path="/signin"
+                      render={() =>
+                        currentUser ? (
+                          <Redirect to="/" />
+                        ) : (
+                          <SignInAndSignUpPage />
+                        )
+                      }
+                    />
+                    <Route
+                      path="/report-issue"
+                      render={() =>
+                        !currentUser ? (
+                          <Redirect to="/signin" />
+                        ) : (
+                          <ReportIssue issueListArray={issueList} />
+                        )
+                      }
+                    />
+                    <Route
+                      path="/location"
+                      component={BusyIndicatorComponent}
+                    />
+                    <Redirect from="/" to="/home" />
+                  </Switch>
+                </FlexBox>
               </FlexBox>
-            </FlexBox>
-          </BusyIndicatorContext.Provider>
-        </IssueListContext.Provider>
-      </CurrentUserContext.Provider>
+            </BusyIndicatorContext.Provider>
+          </IssueListContext.Provider>
+        </CurrentUserContext.Provider>
+      </CurrentLocationContext.Provider>
     </div>
   );
 }

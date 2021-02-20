@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import CurrentUserContext from "../../contexts/current-user/current-user.context";
+import IssueListContext from "../../contexts/issue-list/issue-list.context";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -21,12 +22,15 @@ import { ButtonContainer } from "./issue-report-form.styles";
 
 export default function IssueReportForm({ selectedLat, selectedLng }) {
   const { currentUser } = useContext(CurrentUserContext);
+  const { fetchIssueList } = useContext(IssueListContext);
   const [description, setDescription] = useState("");
   const [descriptionValueState, setDescriptionValueState] = useState("None");
 
   const today = new Date();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchIssueList();
+  }, []);
 
   const handleSubmit = async (event) => {
     if (!currentUser) return;
@@ -42,6 +46,7 @@ export default function IssueReportForm({ selectedLat, selectedLng }) {
         selectedLng,
         currentUser.displayName
       );
+      fetchIssueList();
     } catch (error) {
       console.log(error);
     }

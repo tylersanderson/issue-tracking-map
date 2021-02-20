@@ -35,6 +35,7 @@ export const createIssueDocument = async (
         selectedLatitude,
         selectedLongitude
       ),
+      open: true,
     })
     .then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
@@ -110,6 +111,31 @@ export const getCurrentUser = () => {
     }, reject);
   });
 };
+
+export async function fetchIssues() {
+  const collectionRef = await firestore
+    .collection("issues")
+    .where("open", "==", true);
+  const snapshot = await collectionRef.get();
+  //console.log(snapshot.docs[0].id);
+  //console.log(snapshot.docs[0].data());
+  const transformedCollection = await snapshot.docs.map((doc, i) => {
+    const { description, location, createdBy, createdAt } = doc.data();
+    const id = doc.id;
+    console.log(id);
+    console.log(doc.data());
+    return {
+      id,
+      description,
+      location,
+      createdBy,
+      createdAt,
+    };
+  });
+  console.log(transformedCollection);
+  return transformedCollection;
+  //setIssueList(transformedCollection);
+}
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
