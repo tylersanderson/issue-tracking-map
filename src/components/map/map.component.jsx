@@ -15,9 +15,13 @@ import { spacing } from "@ui5/webcomponents-react-base";
 import GoogleMapReact from "google-map-react";
 import MarkerWithStick from "./marker.jsx";
 import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
+import Circle from "./circle.jsx";
+import { PulsatingCircle } from "./pulsating-circle.styles.js";
 
 const Map = ({ issueArray, page }) => {
-  const { currentPosition } = useContext(CurrentLocationContext);
+  const { currentPosition, snapCurrentPosition } = useContext(
+    CurrentLocationContext
+  );
   const [selectedLat, setSelectedLat] = useState([]);
   const [selectedLng, setSelectedLng] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
@@ -112,6 +116,11 @@ const Map = ({ issueArray, page }) => {
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
               }}
               defaultCenter={{ lat: 40.81, lng: -96.65 }}
+              center={
+                snapCurrentPosition
+                  ? { lat: currentPosition.lat, lng: currentPosition.lng }
+                  : null
+              }
               defaultZoom={12}
               hoverDistance={K_CIRCLE_SIZE / 2}
               distanceToMouse={distanceToMouse}
@@ -138,11 +147,11 @@ const Map = ({ issueArray, page }) => {
                   id={issueArray[i].id}
                 />
               ))}
-              {currentPosition.lat && (
-                <MarkerWithStick
+              {currentPosition.lat && snapCurrentPosition && (
+                <PulsatingCircle
                   lat={currentPosition.lat}
                   lng={currentPosition.lng}
-                  text={"You"}
+                  //text={"You"}
                 />
               )}
             </GoogleMapReact>

@@ -38,6 +38,7 @@ export function MyApp() {
   const [issueList, setIssueList] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
   const [currentPosition, setCurrentPosition] = useState({});
+  const [snapCurrentPosition, setSnapCurrentPosition] = useState(false);
   const setSelectedIssueContext = (issue) => setSelectedIssue(issue);
 
   const history = useHistory();
@@ -58,7 +59,8 @@ export function MyApp() {
         auth.signOut();
         break;
       case "location":
-        history.push("./location");
+        setSnapCurrentPosition(false);
+        setSnapCurrentPosition(true);
         break;
       case "issues":
         history.push("./home");
@@ -137,7 +139,9 @@ export function MyApp() {
 
   return (
     <div>
-      <CurrentLocationContext.Provider value={{ currentPosition }}>
+      <CurrentLocationContext.Provider
+        value={{ currentPosition, snapCurrentPosition }}
+      >
         <CurrentUserContext.Provider value={{ currentUser }}>
           <IssueListContext.Provider value={{ issueList, fetchIssueList }}>
             <BusyIndicatorContext.Provider value={{ busyIndicatorVisible }}>
@@ -223,12 +227,7 @@ export function MyApp() {
                   <Switch>
                     <Route
                       path="/home"
-                      component={() => (
-                        <HomePage
-                          issueListArray={issueList}
-                          setSelectedIssueContext={setSelectedIssueContext}
-                        />
-                      )}
+                      render={() => <HomePage issueListArray={issueList} />}
                     />
                     <Route
                       exact

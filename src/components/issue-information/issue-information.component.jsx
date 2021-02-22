@@ -23,7 +23,9 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import { ButtonContainer } from "./issue-information.styles";
 
 export default function IssueInformation({ issueArray, selectedIssue }) {
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("issue info component");
+  }, []);
 
   return (
     <FlexBox

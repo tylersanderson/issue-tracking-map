@@ -29,6 +29,7 @@ export default function IssueReportForm({ selectedLat, selectedLng }) {
   const today = new Date();
 
   useEffect(() => {
+    console.log("issue report component");
     fetchIssueList();
   }, []);
 
