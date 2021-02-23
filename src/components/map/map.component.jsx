@@ -39,6 +39,7 @@ const Map = ({ issueArray, page }) => {
     //navigator.geolocation.getCurrentPosition(success);
   });
 
+  console.log(issueArray);
   console.log(currentPosition);
   console.log(selectedIssue);
   //const { setSelectedIssueContext } = useContext(IssueSelectedContext);

@@ -117,8 +117,16 @@ export async function fetchIssues() {
     .collection("issues")
     .where("open", "==", true);
   const snapshot = await collectionRef.get();
-  //console.log(snapshot.docs[0].id);
-  //console.log(snapshot.docs[0].data());
+  console.log(snapshot);
+  const docID = snapshot.docs[2].id;
+  console.log(snapshot.docs[2].id);
+  console.log(snapshot.docs[2].data());
+  // const commentsRef = await firestore
+  //   .collection("issues")
+  //   .doc(docID)
+  //   .collection("comments");
+  // const commentsSnapshot = await commentsRef.get();
+  // console.log(commentsSnapshot.docs[0].data());
   const transformedCollection = await snapshot.docs.map((doc, i) => {
     const { description, location, createdBy, createdAt } = doc.data();
     const id = doc.id;

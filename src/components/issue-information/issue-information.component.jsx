@@ -22,7 +22,7 @@ import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 
 import { ButtonContainer } from "./issue-information.styles";
 
-export default function IssueInformation({ issueArray, selectedIssue }) {
+export default function IssueInformation({ issueArray }) {
   useEffect(() => {
     console.log("issue info component");
   }, []);
@@ -41,8 +41,6 @@ export default function IssueInformation({ issueArray, selectedIssue }) {
         // }
         className=""
         heading="Issue List"
-        //onClose={function noRefCheck() {}}
-        onToggle={function noRefCheck() {}}
         showClose={false}
         showCounter
         slot=""
@@ -53,23 +51,49 @@ export default function IssueInformation({ issueArray, selectedIssue }) {
           return (
             <NotificationListItem
               key={i}
-              // actions={
-              //   <div>
-              //     <NotificationAction icon="accept" text="Accept" />
-              //     <NotificationAction icon="message-error" text="Reject" />
-              //   </div>
-              // }
-              // avatar={
-              //   <Avatar
-              //     image="https://sap.github.io/ui5-webcomponents/assets/images/avatars/woman_avatar_1.png"
-              //     size="XS"
-              //   />
-              // }
-              footnotes={<div></div>}
+              footnotes={
+                <div>{issueArray[i].createdAt.toDate().toDateString()}</div>
+              }
               heading={i}
               priority="Medium"
             >
               {issueArray[i].description}
+              <NotificationListGroupItem
+                // actions={
+                //   <div>
+                //     <NotificationAction icon="accept" text="Accept all" />
+                //     <NotificationAction icon="message-error" text="Reject all" />
+                //   </div>
+                // }
+                className=""
+                heading="Comments"
+                showClose={true}
+                showCounter
+                slot=""
+                style={{}}
+                tooltip=""
+              >
+                {issueArray[i].comments
+                  ? issueArray[i].comments.map((issues, i) => {
+                      return (
+                        <NotificationListItem
+                          key={i}
+                          footnotes={
+                            <div>
+                              {issueArray[i].comments.createdAt
+                                .toDate()
+                                .toDateString()}
+                            </div>
+                          }
+                          heading={i}
+                          priority="Medium"
+                        >
+                          {issueArray[i].comments.comment}
+                        </NotificationListItem>
+                      );
+                    })
+                  : null}
+              </NotificationListGroupItem>
             </NotificationListItem>
           );
         })}
