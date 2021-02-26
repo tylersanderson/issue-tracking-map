@@ -112,6 +112,25 @@ export const getCurrentUser = () => {
   });
 };
 
+async function fetchComments(id) {
+  const commentsRef = await firestore
+    .collection("issues")
+    .doc(id)
+    .collection("comments");
+  const commentsSnapshot = await commentsRef.get();
+  const transformedCommentsCollection = await commentsSnapshot.docs.map(
+    (doc, i) => {
+      const { comment, createdAt, createdBy } = doc.data();
+      return {
+        comment,
+        createdAt,
+        createdBy,
+      };
+    }
+  );
+  return transformedCommentsCollection;
+}
+
 export async function fetchIssues() {
   const collectionRef = await firestore
     .collection("issues")
@@ -126,20 +145,29 @@ export async function fetchIssues() {
   //   .doc(docID)
   //   .collection("comments");
   // const commentsSnapshot = await commentsRef.get();
+  // console.log(commentsSnapshot);
   // console.log(commentsSnapshot.docs[0].data());
-  const transformedCollection = await snapshot.docs.map((doc, i) => {
-    const { description, location, createdBy, createdAt } = doc.data();
-    const id = doc.id;
-    console.log(id);
-    console.log(doc.data());
-    return {
-      id,
-      description,
-      location,
-      createdBy,
-      createdAt,
-    };
-  });
+  const transformedCollection = await Promise.all(
+    snapshot.docs.map(async (doc, i) => {
+      const { description, location, createdBy, createdAt } = doc.data();
+      const id = doc.id;
+
+      let comments = await fetchComments(id).then((data) => {
+        return data;
+      });
+      console.log(comments);
+      console.log(id);
+      console.log(doc.data());
+      return {
+        id,
+        description,
+        location,
+        createdBy,
+        createdAt,
+        comments,
+      };
+    })
+  );
   console.log(transformedCollection);
   return transformedCollection;
   //setIssueList(transformedCollection);

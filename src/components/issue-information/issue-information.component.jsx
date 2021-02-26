@@ -58,6 +58,7 @@ export default function IssueInformation({ issueArray }) {
               priority="Medium"
             >
               {issueArray[i].description}
+
               <NotificationListGroupItem
                 // actions={
                 //   <div>
@@ -73,22 +74,23 @@ export default function IssueInformation({ issueArray }) {
                 style={{}}
                 tooltip=""
               >
-                {issueArray[i].comments
-                  ? issueArray[i].comments.map((issues, i) => {
+                {issueArray[i].comments[0]
+                  ? issueArray[i].comments.map((comments, j) => {
                       return (
                         <NotificationListItem
                           key={i}
                           footnotes={
                             <div>
-                              {issueArray[i].comments.createdAt
+                              {issueArray[i].comments[j].createdAt
                                 .toDate()
-                                .toDateString()}
+                                .toDateString()}{" "}
+                              by {issueArray[i].comments[j].createdBy}
                             </div>
                           }
-                          heading={i}
-                          priority="Medium"
+                          //heading={i}
+                          //priority="Medium"
                         >
-                          {issueArray[i].comments.comment}
+                          {issueArray[i].comments[j].comment}
                         </NotificationListItem>
                       );
                     })
