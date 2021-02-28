@@ -108,6 +108,7 @@ const Map = ({ issueArray, page }) => {
           }
           style={{
             maxWidth: "600px",
+            maxHeight: "665px",
             ...spacing.sapUiContentPadding,
           }}
         >

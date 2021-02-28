@@ -45,6 +45,32 @@ export const createIssueDocument = async (
     });
 };
 
+export const createCommentDocument = async (
+  documentID,
+  newComment,
+  displayName
+) => {
+  //if (!userAuth) return;
+  // const location = GeoLocation(37.7853889, -122.4056973);
+  // console.log(location);
+
+  firestore
+    .collection("issues")
+    .doc(documentID)
+    .collection("comments")
+    .add({
+      comment: newComment,
+      createdAt: new Date(),
+      createdBy: displayName,
+    })
+    .then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+    });
+};
+
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
 

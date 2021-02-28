@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
+import CurrentUserContext from "../../contexts/current-user/current-user.context";
+import IssueListContext from "../../contexts/issue-list/issue-list.context";
 import {
   FlexBox,
   FlexBoxJustifyContent,
@@ -20,13 +22,15 @@ import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
 import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
-import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
-import CommentAdd from "../comment-add/comment-add.component";
 import { ButtonContainer } from "./issue-information.styles";
+import { createCommentDocument } from "../../firebase/firebase.utils";
 
 export default function IssueInformation({ issueArray }) {
+  const { currentUser } = useContext(CurrentUserContext);
+  const { fetchIssueList } = useContext(IssueListContext);
   const [newComment, setNewComment] = useState("");
-  const [newCommentValueState, tesetNewCommentValueState] = useState("None");
+  const [newCommentValueState, setNewCommentValueState] = useState("None");
+  const [issueForComment, setIssueForComment] = useState("");
 
   useEffect(() => {
     console.log("issue info component");
@@ -34,9 +38,30 @@ export default function IssueInformation({ issueArray }) {
 
   const dialogRef = useRef();
 
-  const handleCommentAdd = (issue) => {
-    console.log(issue);
+  const handleDialogOpen = (issue) => {
+    setIssueForComment(issue);
     dialogRef.current.open();
+  };
+
+  const handleCommentAdd = async (issue) => {
+    console.log(issueForComment);
+    if (!currentUser) return;
+    //.current.open();
+    newComment == null || newComment === ""
+      ? setNewCommentValueState("Error")
+      : setNewCommentValueState("None");
+    try {
+      await createCommentDocument(
+        issueForComment,
+        newComment,
+        currentUser.displayName
+      );
+      fetchIssueList();
+      dialogRef.current.close();
+      setNewComment("");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -59,67 +84,78 @@ export default function IssueInformation({ issueArray }) {
         style={{}}
         tooltip=""
       >
-        {issueArray.map((issues, i) => {
-          return (
-            <NotificationListItem
-              key={i}
-              // footnotes={
-              //   <div>{issueArray[i].createdAt.toDate().toDateString()}</div>
-              // }
-              heading={i}
-              priority="Medium"
-            >
-              {issueArray[i].description}
-              <br></br>
-              <br></br>
-              {issueArray[i].createdAt.toDate().toDateString()}
-              {" created by "}
-              {issueArray[i].createdBy}
-              <NotificationListGroupItem
-                // actions={
-                //   <div>
-                //     <NotificationAction icon="accept" text="Accept all" />
-                //     <NotificationAction icon="message-error" text="Reject all" />
-                //   </div>
+        {issueArray
+          .sort(function (a, b) {
+            return a.createdAt - b.createdAt;
+          })
+          .map((issues, i) => {
+            return (
+              <NotificationListItem
+                key={i}
+                // footnotes={
+                //   <div>{issueArray[i].createdAt.toDate().toDateString()}</div>
                 // }
-                className=""
-                heading="Comments"
-                showClose={false}
-                showCounter
-                slot=""
-                style={{}}
-                tooltip=""
-                collapsed={true}
+                heading={i}
+                priority="Medium"
               >
-                {issueArray[i].comments[0]
-                  ? issueArray[i].comments.map((comments, j) => {
-                      return (
-                        <NotificationListItem
-                          key={i}
-                          footnotes={
-                            <div>
-                              {issueArray[i].comments[j].createdAt
-                                .toDate()
-                                .toDateString()}
-                            </div>
-                          }
-                          heading={issueArray[i].comments[j].createdBy}
-                          //priority="Medium"
-                        >
-                          {issueArray[i].comments[j].comment}
-                        </NotificationListItem>
-                      );
-                    })
-                  : null}
-              </NotificationListGroupItem>
-              <ButtonContainer>
-                <Button onClick={() => handleCommentAdd(issueArray[i])}>
-                  Add Comment
-                </Button>
-              </ButtonContainer>
-            </NotificationListItem>
-          );
-        })}
+                {issueArray[i].description}
+                <br></br>
+                <br></br>
+                {issueArray[i].createdAt.toDate().toDateString()}
+                {" created by "}
+                {issueArray[i].createdBy}
+                <NotificationListGroupItem
+                  // actions={
+                  //   <div>
+                  //     <NotificationAction icon="accept" text="Accept all" />
+                  //     <NotificationAction icon="message-error" text="Reject all" />
+                  //   </div>
+                  // }
+                  className=""
+                  heading="Comments"
+                  showClose={false}
+                  showCounter
+                  slot=""
+                  style={{}}
+                  tooltip=""
+                  collapsed={true}
+                >
+                  {issueArray[i].comments[0]
+                    ? issueArray[i].comments
+                        .sort(function (a, b) {
+                          return a.createdAt - b.createdAt;
+                        })
+                        .map((comments, j) => {
+                          return (
+                            <NotificationListItem
+                              key={j}
+                              footnotes={
+                                <div>
+                                  {issueArray[i].comments[j].createdAt
+                                    .toDate()
+                                    .toLocaleDateString()}{" "}
+                                  {issueArray[i].comments[j].createdAt
+                                    .toDate()
+                                    .toLocaleTimeString()}
+                                </div>
+                              }
+                              heading={issueArray[i].comments[j].createdBy}
+                              //priority="Medium"
+                            >
+                              {issueArray[i].comments[j].comment}
+                            </NotificationListItem>
+                          );
+                        })
+                    : null}
+                </NotificationListGroupItem>
+                <ButtonContainer>
+                  <Button onClick={() => handleDialogOpen(issueArray[i].id)}>
+                    Add Comment
+                  </Button>
+                </ButtonContainer>
+              </NotificationListItem>
+            );
+          })}
       </NotificationListGroupItem>
       <div>
         <Dialog
@@ -130,9 +166,7 @@ export default function IssueInformation({ issueArray }) {
               wrap={FlexBoxWrap.Wrap}
             >
               <ButtonContainer>
-                <Button onClick={() => dialogRef.current.close()}>
-                  Submit
-                </Button>
+                <Button onClick={() => handleCommentAdd()}>Submit</Button>
               </ButtonContainer>
               <ButtonContainer>
                 <Button onClick={() => dialogRef.current.close()}>
