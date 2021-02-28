@@ -50,10 +50,6 @@ export const createCommentDocument = async (
   newComment,
   displayName
 ) => {
-  //if (!userAuth) return;
-  // const location = GeoLocation(37.7853889, -122.4056973);
-  // console.log(location);
-
   firestore
     .collection("issues")
     .doc(documentID)
@@ -64,10 +60,10 @@ export const createCommentDocument = async (
       createdBy: displayName,
     })
     .then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
+      // console.log("Document written with ID: ", docRef.id);
     })
     .catch((error) => {
-      console.error("Error adding document: ", error);
+      //console.error("Error adding document: ", error);
     });
 };
 
@@ -89,7 +85,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         ...additionalData,
       });
     } catch (error) {
-      console.log("error creating user", error.message);
+      //console.log("error creating user", error.message);
     }
   }
 
@@ -162,17 +158,6 @@ export async function fetchIssues() {
     .collection("issues")
     .where("open", "==", true);
   const snapshot = await collectionRef.get();
-  console.log(snapshot);
-  const docID = snapshot.docs[2].id;
-  console.log(snapshot.docs[2].id);
-  console.log(snapshot.docs[2].data());
-  // const commentsRef = await firestore
-  //   .collection("issues")
-  //   .doc(docID)
-  //   .collection("comments");
-  // const commentsSnapshot = await commentsRef.get();
-  // console.log(commentsSnapshot);
-  // console.log(commentsSnapshot.docs[0].data());
   const transformedCollection = await Promise.all(
     snapshot.docs.map(async (doc, i) => {
       const { description, location, createdBy, createdAt } = doc.data();
@@ -181,9 +166,6 @@ export async function fetchIssues() {
       let comments = await fetchComments(id).then((data) => {
         return data;
       });
-      console.log(comments);
-      console.log(id);
-      console.log(doc.data());
       return {
         id,
         description,
@@ -194,7 +176,6 @@ export async function fetchIssues() {
       };
     })
   );
-  console.log(transformedCollection);
   return transformedCollection;
   //setIssueList(transformedCollection);
 }

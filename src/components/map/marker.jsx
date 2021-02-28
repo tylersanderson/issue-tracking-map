@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-//import shouldPureComponentUpdate from "react-pure-render/function";
 
 import {
   markerStyle,
@@ -21,8 +20,6 @@ export default class MarkerWithStick extends Component {
   };
 
   static defaultProps = {};
-
-  //shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
     const { text, zIndex } = this.props;

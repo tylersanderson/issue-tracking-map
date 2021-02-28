@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BusyIndicatorComponent from "./components/busy-indicator/busy-indicator.component";
 import BusyIndicatorContext from "./contexts/busy-indicator/busy-indicator.context";
 import IssueListContext from "./contexts/issue-list/issue-list.context";
@@ -26,7 +26,6 @@ import "@ui5/webcomponents-react/dist/Assets.js"; // Only if using the @ui5/webc
 import {
   auth,
   createUserProfileDocument,
-  firestore,
   fetchIssues,
 } from "./firebase/firebase.utils";
 
@@ -76,30 +75,6 @@ export function MyApp() {
     }
   };
 
-  // async function fetchIssues() {
-  //   const collectionRef = await firestore
-  //     .collection("issues")
-  //     .where("open", "==", true);
-  //   const snapshot = await collectionRef.get();
-  //   //console.log(snapshot.docs[0].id);
-  //   //console.log(snapshot.docs[0].data());
-  //   const transformedCollection = await snapshot.docs.map((doc, i) => {
-  //     const { description, location, createdBy, createdAt } = doc.data();
-  //     const id = doc.id;
-  //     console.log(id);
-  //     console.log(doc.data());
-  //     return {
-  //       id,
-  //       description,
-  //       location,
-  //       createdBy,
-  //       createdAt,
-  //     };
-  //   });
-  //   console.log(transformedCollection);
-  //   setIssueList(transformedCollection);
-  // }
-
   const fetchIssueList = async () => {
     const openIssues = await fetchIssues();
     setIssueList(openIssues);
@@ -131,11 +106,7 @@ export function MyApp() {
     navigator.geolocation.getCurrentPosition(success);
   }, []);
 
-  useEffect(() => {
-    console.log("MyApp");
-    //busyIndicatorShow();
-    //busyIndicatorHide();
-  });
+  useEffect(() => {});
 
   return (
     <div>
@@ -158,7 +129,6 @@ export function MyApp() {
                 showNotifications
                 onNotificationsClick={() => {
                   setBusyIndicatorVisible(!busyIndicatorVisible);
-                  console.log(busyIndicatorVisible);
                 }}
               ></ShellBar>
               <FlexBox

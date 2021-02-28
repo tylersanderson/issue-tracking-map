@@ -15,7 +15,6 @@ import { spacing } from "@ui5/webcomponents-react-base";
 import GoogleMapReact from "google-map-react";
 import MarkerWithStick from "./marker.jsx";
 import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
-import Circle from "./circle.jsx";
 import { PulsatingCircle } from "./pulsating-circle.styles.js";
 
 const Map = ({ issueArray, page }) => {
@@ -25,24 +24,8 @@ const Map = ({ issueArray, page }) => {
   const [selectedLat, setSelectedLat] = useState([]);
   const [selectedLng, setSelectedLng] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
-  // const [currentPosition, setCurrentPosition] = useState({});
 
-  // const success = (position) => {
-  //   const currentPosition = {
-  //     lat: position.coords.latitude,
-  //     lng: position.coords.longitude,
-  //   };
-  //   setCurrentPosition(currentPosition);
-  // };
-
-  useEffect(() => {
-    //navigator.geolocation.getCurrentPosition(success);
-  });
-
-  console.log(issueArray);
-  console.log(currentPosition);
-  console.log(selectedIssue);
-  //const { setSelectedIssueContext } = useContext(IssueSelectedContext);
+  useEffect(() => {});
 
   const distanceToMouse = (markerPos, mousePos, markerProps) => {
     const x = markerPos.x;
@@ -68,17 +51,13 @@ const Map = ({ issueArray, page }) => {
   const dialogRef = useRef();
 
   const handleSelectedIssue = (key, childProps) => {
-    const markerId = childProps; //.marker.get("id");
+    const markerId = childProps;
     console.log(markerId.id);
     const issueSelected = findIssue(markerId.id, issueArray);
     setSelectedIssue(issueSelected);
     if (page === "HomePage") {
       dialogRef.current.open();
     }
-    // const index = this.props.markers.findIndex(m => m.get('id') === markerId);
-    // if (this.props.onChildClick) {
-    //   this.props.onChildClick(index);
-    // }
   };
 
   const findIssue = (issueID, issueListArray) => {
@@ -88,8 +67,6 @@ const Map = ({ issueArray, page }) => {
       }
     }
   };
-
-  console.log(issueArray);
 
   return (
     // Important! Always set the container height explicitly

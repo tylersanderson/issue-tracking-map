@@ -29,7 +29,6 @@ export default function IssueReportForm({ selectedLat, selectedLng }) {
   const today = new Date();
 
   useEffect(() => {
-    console.log("issue report component");
     fetchIssueList();
   }, []);
 
@@ -48,9 +47,7 @@ export default function IssueReportForm({ selectedLat, selectedLng }) {
         currentUser.displayName
       );
       fetchIssueList();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
 
     // try {
     //   const { user } = await auth

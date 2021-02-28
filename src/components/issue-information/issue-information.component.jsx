@@ -5,18 +5,10 @@ import {
   FlexBox,
   FlexBoxJustifyContent,
   FlexBoxWrap,
-  Card,
   Button,
 } from "@ui5/webcomponents-react";
 import { NotificationListGroupItem } from "@ui5/webcomponents-react/lib/NotificationListGroupItem";
 import { NotificationListItem } from "@ui5/webcomponents-react/lib/NotificationListItem";
-import { NotificationAction } from "@ui5/webcomponents-react/lib/NotificationAction";
-import { Avatar } from "@ui5/webcomponents-react/lib/Avatar";
-import { Label } from "@ui5/webcomponents-react/lib/Label";
-import { spacing } from "@ui5/webcomponents-react-base";
-import { Form } from "@ui5/webcomponents-react/lib/Form";
-import { FormItem } from "@ui5/webcomponents-react/lib/FormItem";
-import { Input } from "@ui5/webcomponents-react/lib/Input";
 import { TextArea } from "@ui5/webcomponents-react/lib/TextArea";
 import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
 import "@ui5/webcomponents/dist/Assets.js";
@@ -24,6 +16,7 @@ import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webc
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
 import { ButtonContainer } from "./issue-information.styles";
 import { createCommentDocument } from "../../firebase/firebase.utils";
+import { useHistory } from "react-router-dom";
 
 export default function IssueInformation({ issueArray }) {
   const { currentUser } = useContext(CurrentUserContext);
@@ -32,19 +25,22 @@ export default function IssueInformation({ issueArray }) {
   const [newCommentValueState, setNewCommentValueState] = useState("None");
   const [issueForComment, setIssueForComment] = useState("");
 
-  useEffect(() => {
-    console.log("issue info component");
-  }, []);
+  useEffect(() => {}, []);
 
   const dialogRef = useRef();
 
+  const history = useHistory();
+
   const handleDialogOpen = (issue) => {
-    setIssueForComment(issue);
-    dialogRef.current.open();
+    if (!currentUser) {
+      history.push("/signin");
+    } else {
+      setIssueForComment(issue);
+      dialogRef.current.open();
+    }
   };
 
   const handleCommentAdd = async (issue) => {
-    console.log(issueForComment);
     if (!currentUser) return;
     //.current.open();
     newComment == null || newComment === ""
