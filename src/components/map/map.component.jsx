@@ -16,6 +16,7 @@ import GoogleMapReact from "google-map-react";
 import MarkerWithStick from "./marker.jsx";
 import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
 import { PulsatingCircle } from "./pulsating-circle.styles.js";
+import { IssueInformationContainer } from "./map.styles.js";
 
 const Map = ({ issueArray, page }) => {
   const {
@@ -100,7 +101,7 @@ const Map = ({ issueArray, page }) => {
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
               }}
               defaultCenter={{ lat: 40.81, lng: -96.65 }}
-              center={(function example() {
+              center={(function centerMap() {
                 if (snapCurrentPosition) {
                   return { lat: currentPosition.lat, lng: currentPosition.lng };
                 } else if (snapIssuePosition) {
@@ -129,7 +130,7 @@ const Map = ({ issueArray, page }) => {
                   key={i}
                   lat={issueArray[i].location.latitude}
                   lng={issueArray[i].location.longitude}
-                  text={String(i)}
+                  text={String(i + 1)}
                   id={issueArray[i].id}
                 />
               ))}
@@ -145,14 +146,14 @@ const Map = ({ issueArray, page }) => {
         </Card>
         {page === "HomePage" ? (
           <div>
-            <div style={{ width: "600px" }}>
+            <IssueInformationContainer>
               <IssueInformation
                 issueArray={issueArray}
                 setSnapIssuePosition={setSnapIssuePosition}
                 setSelectedIssueLat={setSelectedIssueLat}
                 setSelectedIssueLng={setSelectedIssueLng}
               />
-            </div>
+            </IssueInformationContainer>
             <div>
               <Dialog
                 ref={dialogRef}

@@ -68,9 +68,10 @@ export default function IssueInformation({
   };
 
   const handleIssueMapFocus = (issueLat, issueLng) => {
-    setSnapIssuePosition(true);
     setSelectedIssueLat(issueLat);
     setSelectedIssueLng(issueLng);
+    setSnapIssuePosition(true);
+    setSnapIssuePosition(false);
   };
 
   return (
@@ -104,7 +105,7 @@ export default function IssueInformation({
                 // footnotes={
                 //   <div>{issueArray[i].createdAt.toDate().toDateString()}</div>
                 // }
-                heading={i}
+                heading={"Issue " + (i + 1)}
                 priority="Medium"
                 actions={
                   <>

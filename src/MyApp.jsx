@@ -79,7 +79,11 @@ export function MyApp() {
 
   const fetchIssueList = async () => {
     const openIssues = await fetchIssues();
-    setIssueList(openIssues);
+    setIssueList(
+      openIssues.sort(function (a, b) {
+        return a.createdAt - b.createdAt;
+      })
+    );
   };
 
   const success = (position) => {
