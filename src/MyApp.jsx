@@ -38,6 +38,7 @@ export function MyApp() {
   const [selectedIssue, setSelectedIssue] = useState([]);
   const [currentPosition, setCurrentPosition] = useState({});
   const [snapCurrentPosition, setSnapCurrentPosition] = useState(false);
+  const [showCurrentPosition, setShowCurrentPosition] = useState(false);
   const setSelectedIssueContext = (issue) => setSelectedIssue(issue);
 
   const history = useHistory();
@@ -58,8 +59,9 @@ export function MyApp() {
         auth.signOut();
         break;
       case "location":
-        setSnapCurrentPosition(false);
+        setShowCurrentPosition(true);
         setSnapCurrentPosition(true);
+        setSnapCurrentPosition(false);
         break;
       case "issues":
         history.push("./home");
@@ -111,7 +113,7 @@ export function MyApp() {
   return (
     <div>
       <CurrentLocationContext.Provider
-        value={{ currentPosition, snapCurrentPosition }}
+        value={{ currentPosition, snapCurrentPosition, showCurrentPosition }}
       >
         <CurrentUserContext.Provider value={{ currentUser }}>
           <IssueListContext.Provider value={{ issueList, fetchIssueList }}>

@@ -18,12 +18,17 @@ import { K_CIRCLE_SIZE, K_STICK_SIZE } from "./marker-styles.js";
 import { PulsatingCircle } from "./pulsating-circle.styles.js";
 
 const Map = ({ issueArray, page }) => {
-  const { currentPosition, snapCurrentPosition } = useContext(
-    CurrentLocationContext
-  );
+  const {
+    currentPosition,
+    snapCurrentPosition,
+    showCurrentPosition,
+  } = useContext(CurrentLocationContext);
   const [selectedLat, setSelectedLat] = useState([]);
   const [selectedLng, setSelectedLng] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState([]);
+  const [selectedIssueLat, setSelectedIssueLat] = useState([]);
+  const [selectedIssueLng, setSelectedIssueLng] = useState([]);
+  const [snapIssuePosition, setSnapIssuePosition] = useState(false);
 
   useEffect(() => {});
 
@@ -95,11 +100,13 @@ const Map = ({ issueArray, page }) => {
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
               }}
               defaultCenter={{ lat: 40.81, lng: -96.65 }}
-              center={
-                snapCurrentPosition
-                  ? { lat: currentPosition.lat, lng: currentPosition.lng }
-                  : null
-              }
+              center={(function example() {
+                if (snapCurrentPosition) {
+                  return { lat: currentPosition.lat, lng: currentPosition.lng };
+                } else if (snapIssuePosition) {
+                  return { lat: selectedIssueLat, lng: selectedIssueLng };
+                }
+              })()}
               defaultZoom={12}
               hoverDistance={K_CIRCLE_SIZE / 2}
               distanceToMouse={distanceToMouse}
@@ -126,7 +133,7 @@ const Map = ({ issueArray, page }) => {
                   id={issueArray[i].id}
                 />
               ))}
-              {currentPosition.lat && snapCurrentPosition && (
+              {currentPosition.lat && showCurrentPosition && (
                 <PulsatingCircle
                   lat={currentPosition.lat}
                   lng={currentPosition.lng}
@@ -139,7 +146,12 @@ const Map = ({ issueArray, page }) => {
         {page === "HomePage" ? (
           <div>
             <div style={{ width: "600px" }}>
-              <IssueInformation issueArray={issueArray} />
+              <IssueInformation
+                issueArray={issueArray}
+                setSnapIssuePosition={setSnapIssuePosition}
+                setSelectedIssueLat={setSelectedIssueLat}
+                setSelectedIssueLng={setSelectedIssueLng}
+              />
             </div>
             <div>
               <Dialog

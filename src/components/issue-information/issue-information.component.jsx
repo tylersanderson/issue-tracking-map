@@ -9,16 +9,23 @@ import {
 } from "@ui5/webcomponents-react";
 import { NotificationListGroupItem } from "@ui5/webcomponents-react/lib/NotificationListGroupItem";
 import { NotificationListItem } from "@ui5/webcomponents-react/lib/NotificationListItem";
+import { NotificationAction } from "@ui5/webcomponents-react/lib/NotificationAction";
 import { TextArea } from "@ui5/webcomponents-react/lib/TextArea";
 import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
 import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
+import "@ui5/webcomponents-react/dist/Assets.js"; // Only if using the @ui5/webcomponents-react package
 import { ButtonContainer } from "./issue-information.styles";
 import { createCommentDocument } from "../../firebase/firebase.utils";
 import { useHistory } from "react-router-dom";
 
-export default function IssueInformation({ issueArray }) {
+export default function IssueInformation({
+  issueArray,
+  setSnapIssuePosition,
+  setSelectedIssueLat,
+  setSelectedIssueLng,
+}) {
   const { currentUser } = useContext(CurrentUserContext);
   const { fetchIssueList } = useContext(IssueListContext);
   const [newComment, setNewComment] = useState("");
@@ -60,6 +67,12 @@ export default function IssueInformation({ issueArray }) {
     }
   };
 
+  const handleIssueMapFocus = (issueLat, issueLng) => {
+    setSnapIssuePosition(true);
+    setSelectedIssueLat(issueLat);
+    setSelectedIssueLng(issueLng);
+  };
+
   return (
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}
@@ -93,6 +106,21 @@ export default function IssueInformation({ issueArray }) {
                 // }
                 heading={i}
                 priority="Medium"
+                actions={
+                  <>
+                    <Button
+                      icon="map"
+                      onClick={() =>
+                        handleIssueMapFocus(
+                          issueArray[i].location.latitude,
+                          issueArray[i].location.longitude
+                        )
+                      }
+                    >
+                      Add Comment
+                    </Button>
+                  </>
+                }
               >
                 {issueArray[i].description}
                 <br></br>
