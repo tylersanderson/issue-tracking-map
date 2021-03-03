@@ -90,12 +90,12 @@ const Map = ({ issueArray, page }) => {
               : "Report New Issue - Select Location"
           }
           style={{
-            maxWidth: "600px",
-            maxHeight: "665px",
+            maxWidth: "800px",
+            maxHeight: "80vh",
             ...spacing.sapUiContentPadding,
           }}
         >
-          <div style={{ height: "80vh", width: "100%" }}>
+          <div style={{ height: "73vh", width: "100%" }}>
             <GoogleMapReact
               bootstrapURLKeys={{
                 key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,

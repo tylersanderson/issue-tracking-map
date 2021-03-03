@@ -131,8 +131,8 @@ export function MyApp() {
                 //profile={<Avatar image="ui5-logo.png" />}
                 primaryTitle={"Issue Tracking Map"}
                 secondaryTitle={currentUser ? currentUser.displayName : ""}
-                notificationCount={8}
-                showNotifications
+                //notificationCount={8}
+                //showNotifications
                 onNotificationsClick={() => {
                   setBusyIndicatorVisible(!busyIndicatorVisible);
                 }}

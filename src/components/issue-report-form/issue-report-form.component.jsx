@@ -17,7 +17,7 @@ import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
 import { createIssueDocument } from "../../firebase/firebase.utils";
-
+import { useHistory } from "react-router-dom";
 import { ButtonContainer } from "./issue-report-form.styles";
 
 export default function IssueReportForm({ selectedLat, selectedLng }) {
@@ -27,6 +27,8 @@ export default function IssueReportForm({ selectedLat, selectedLng }) {
   const [descriptionValueState, setDescriptionValueState] = useState("None");
 
   const today = new Date();
+
+  const history = useHistory();
 
   useEffect(() => {
     fetchIssueList();
@@ -47,6 +49,7 @@ export default function IssueReportForm({ selectedLat, selectedLng }) {
         currentUser.displayName
       );
       fetchIssueList();
+      history.push("/");
     } catch (error) {}
 
     // try {

@@ -72,6 +72,7 @@ export default function IssueInformation({
     setSelectedIssueLng(issueLng);
     setSnapIssuePosition(true);
     setSnapIssuePosition(false);
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -94,93 +95,89 @@ export default function IssueInformation({
         style={{}}
         tooltip=""
       >
-        {issueArray
-          .sort(function (a, b) {
-            return a.createdAt - b.createdAt;
-          })
-          .map((issues, i) => {
-            return (
-              <NotificationListItem
-                key={i}
-                // footnotes={
-                //   <div>{issueArray[i].createdAt.toDate().toDateString()}</div>
-                // }
-                heading={"Issue " + (i + 1)}
-                priority="Medium"
-                actions={
-                  <>
-                    <Button
-                      icon="map"
-                      onClick={() =>
-                        handleIssueMapFocus(
-                          issueArray[i].location.latitude,
-                          issueArray[i].location.longitude
-                        )
-                      }
-                    >
-                      Add Comment
-                    </Button>
-                  </>
-                }
-              >
-                {issueArray[i].description}
-                <br></br>
-                <br></br>
-                {issueArray[i].createdAt.toDate().toDateString()}
-                {" created by "}
-                {issueArray[i].createdBy}
-                <NotificationListGroupItem
-                  // actions={
-                  //   <div>
-                  //     <NotificationAction icon="accept" text="Accept all" />
-                  //     <NotificationAction icon="message-error" text="Reject all" />
-                  //   </div>
-                  // }
-                  className=""
-                  heading="Comments"
-                  showClose={false}
-                  showCounter
-                  slot=""
-                  style={{}}
-                  tooltip=""
-                  collapsed={true}
-                >
-                  {issueArray[i].comments[0]
-                    ? issueArray[i].comments
-                        .sort(function (a, b) {
-                          return a.createdAt - b.createdAt;
-                        })
-                        .map((comments, j) => {
-                          return (
-                            <NotificationListItem
-                              key={j}
-                              footnotes={
-                                <div>
-                                  {issueArray[i].comments[j].createdAt
-                                    .toDate()
-                                    .toLocaleDateString()}{" "}
-                                  {issueArray[i].comments[j].createdAt
-                                    .toDate()
-                                    .toLocaleTimeString()}
-                                </div>
-                              }
-                              heading={issueArray[i].comments[j].createdBy}
-                              //priority="Medium"
-                            >
-                              {issueArray[i].comments[j].comment}
-                            </NotificationListItem>
-                          );
-                        })
-                    : null}
-                </NotificationListGroupItem>
-                <ButtonContainer>
-                  <Button onClick={() => handleDialogOpen(issueArray[i].id)}>
+        {issueArray.map((issues, i) => {
+          return (
+            <NotificationListItem
+              key={i}
+              // footnotes={
+              //   <div>{issueArray[i].createdAt.toDate().toDateString()}</div>
+              // }
+              heading={"Issue #" + (i + 1)}
+              priority="Medium"
+              actions={
+                <>
+                  <Button
+                    icon="map"
+                    onClick={() =>
+                      handleIssueMapFocus(
+                        issueArray[i].location.latitude,
+                        issueArray[i].location.longitude
+                      )
+                    }
+                  >
                     Add Comment
                   </Button>
-                </ButtonContainer>
-              </NotificationListItem>
-            );
-          })}
+                </>
+              }
+            >
+              {issueArray[i].description}
+              <br></br>
+              <br></br>
+              {issueArray[i].createdAt.toDate().toDateString()}
+              {" created by "}
+              {issueArray[i].createdBy}
+              <NotificationListGroupItem
+                // actions={
+                //   <div>
+                //     <NotificationAction icon="accept" text="Accept all" />
+                //     <NotificationAction icon="message-error" text="Reject all" />
+                //   </div>
+                // }
+                className=""
+                heading="Comments"
+                showClose={false}
+                showCounter
+                slot=""
+                style={{}}
+                tooltip=""
+                collapsed={true}
+              >
+                {issueArray[i].comments[0]
+                  ? issueArray[i].comments
+                      .sort(function (a, b) {
+                        return a.createdAt - b.createdAt;
+                      })
+                      .map((comments, j) => {
+                        return (
+                          <NotificationListItem
+                            key={j}
+                            footnotes={
+                              <div>
+                                {issueArray[i].comments[j].createdAt
+                                  .toDate()
+                                  .toLocaleDateString()}{" "}
+                                {issueArray[i].comments[j].createdAt
+                                  .toDate()
+                                  .toLocaleTimeString()}
+                              </div>
+                            }
+                            heading={issueArray[i].comments[j].createdBy}
+                            //priority="Medium"
+                          >
+                            {issueArray[i].comments[j].comment}
+                          </NotificationListItem>
+                        );
+                      })
+                  : null}
+              </NotificationListGroupItem>
+              <ButtonContainer>
+                <Button onClick={() => handleDialogOpen(issueArray[i].id)}>
+                  Add Comment
+                </Button>
+              </ButtonContainer>
+            </NotificationListItem>
+          );
+        })}
       </NotificationListGroupItem>
       <div>
         <Dialog
