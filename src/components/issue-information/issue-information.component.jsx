@@ -76,10 +76,7 @@ export default function IssueInformation({
   };
 
   return (
-    <FlexBox
-      justifyContent={FlexBoxJustifyContent.Center}
-      wrap={FlexBoxWrap.Wrap}
-    >
+    <div>
       <NotificationListGroupItem
         // actions={
         //   <div>
@@ -213,6 +210,6 @@ export default function IssueInformation({
           ></TextArea>
         </Dialog>
       </div>
-    </FlexBox>
+    </div>
   );
 }
