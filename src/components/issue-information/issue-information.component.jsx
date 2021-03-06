@@ -9,7 +9,6 @@ import {
 } from "@ui5/webcomponents-react";
 import { NotificationListGroupItem } from "@ui5/webcomponents-react/lib/NotificationListGroupItem";
 import { NotificationListItem } from "@ui5/webcomponents-react/lib/NotificationListItem";
-import { NotificationAction } from "@ui5/webcomponents-react/lib/NotificationAction";
 import { TextArea } from "@ui5/webcomponents-react/lib/TextArea";
 import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
 import "@ui5/webcomponents/dist/Assets.js";
@@ -102,7 +101,7 @@ export default function IssueInformation({
               heading={"Issue #" + (i + 1)}
               priority="Medium"
               actions={
-                <>
+                <div>
                   <Button
                     icon="map"
                     onClick={() =>
@@ -114,7 +113,7 @@ export default function IssueInformation({
                   >
                     Add Comment
                   </Button>
-                </>
+                </div>
               }
             >
               {issueArray[i].description}
