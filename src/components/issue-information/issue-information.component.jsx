@@ -9,6 +9,7 @@ import {
 } from "@ui5/webcomponents-react";
 import { NotificationListGroupItem } from "@ui5/webcomponents-react/lib/NotificationListGroupItem";
 import { NotificationListItem } from "@ui5/webcomponents-react/lib/NotificationListItem";
+import { NotificationAction } from "@ui5/webcomponents-react/lib/NotificationAction";
 import { TextArea } from "@ui5/webcomponents-react/lib/TextArea";
 import { Dialog } from "@ui5/webcomponents-react/lib/Dialog";
 import "@ui5/webcomponents/dist/Assets.js";
@@ -110,9 +111,7 @@ export default function IssueInformation({
                         issueArray[i].location.longitude
                       )
                     }
-                  >
-                    Add Comment
-                  </Button>
+                  ></Button>
                 </>
               }
             >
