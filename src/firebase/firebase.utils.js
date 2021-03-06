@@ -21,10 +21,6 @@ export const createIssueDocument = async (
   selectedLongitude,
   displayName
 ) => {
-  //if (!userAuth) return;
-  // const location = GeoLocation(37.7853889, -122.4056973);
-  // console.log(location);
-
   firestore
     .collection("issues")
     .add({
