@@ -87,6 +87,7 @@ export default function SignUp() {
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}
       wrap={FlexBoxWrap.Wrap}
+      style={{ maxWidth: "300px" }}
     >
       <Card
         heading="I do not have an account"

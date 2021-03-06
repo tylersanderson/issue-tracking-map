@@ -43,6 +43,7 @@ export default function SignIn() {
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}
       wrap={FlexBoxWrap.Wrap}
+      style={{ maxWidth: "300px" }}
     >
       <Card
         heading="I already have an account"

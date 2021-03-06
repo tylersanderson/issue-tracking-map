@@ -10,6 +10,7 @@ import {
   ShellBar,
   Button,
 } from "@ui5/webcomponents-react";
+import { spacing } from "@ui5/webcomponents-react-base";
 import { SideNavigation } from "@ui5/webcomponents-react/lib/SideNavigation";
 import { SideNavigationItem } from "@ui5/webcomponents-react/lib/SideNavigationItem";
 import { SideNavigationSubItem } from "@ui5/webcomponents-react/lib/SideNavigationSubItem";
@@ -23,6 +24,7 @@ import "@ui5/webcomponents/dist/Assets.js";
 import "@ui5/webcomponents-fiori/dist/Assets.js"; // Only if using the @ui5/webcomponents-fiori package
 import "@ui5/webcomponents-icons/dist/Assets.js"; // Only if using the @ui5/webcomponents-icons package
 import "@ui5/webcomponents-react/dist/Assets.js"; // Only if using the @ui5/webcomponents-react package
+
 import {
   auth,
   createUserProfileDocument,
@@ -138,9 +140,9 @@ export function MyApp() {
                 }}
               ></ShellBar>
               <FlexBox
-              //justifyContent={FlexBoxJustifyContent.Left}
-              //wrap={FlexBoxWrap.Wrap}
-              //style={spacing.sapUiContentPadding}
+                justifyContent={FlexBoxJustifyContent.Left}
+                //wrap={FlexBoxWrap.Wrap}
+                //style={spacing.sapUiContentPadding}
               >
                 <SideNavigation
                   className=""
@@ -153,8 +155,8 @@ export function MyApp() {
                   // }
                   onSelectionChange={handleMenuItemClick}
                   // slot=""
-                  // style={{}}
-                  // tooltip=""
+                  //style={{ minWidth: "70px", marginLeft: "5px" }}
+                  //tooltip=""
                 >
                   <SideNavigationItem data-key="home" icon="home" text="Home" />
                   {currentUser ? null : (
@@ -182,8 +184,7 @@ export function MyApp() {
                   <SideNavigationItem
                     data-key="location"
                     icon="locate-me"
-                    selected
-                    text="Locations"
+                    text="My Location"
                   />
                   {currentUser ? (
                     <SideNavigationItem
