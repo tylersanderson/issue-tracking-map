@@ -101,7 +101,7 @@ export default function IssueInformation({
               heading={"Issue #" + (i + 1)}
               priority="Medium"
               actions={
-                <div>
+                <>
                   <Button
                     icon="map"
                     onClick={() =>
@@ -113,7 +113,7 @@ export default function IssueInformation({
                   >
                     Add Comment
                   </Button>
-                </div>
+                </>
               }
             >
               {issueArray[i].description}
