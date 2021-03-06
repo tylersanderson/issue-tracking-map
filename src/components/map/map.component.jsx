@@ -58,7 +58,7 @@ const Map = ({ issueArray, page }) => {
 
   const handleSelectedIssue = (key, childProps) => {
     const markerId = childProps;
-    console.log(markerId.id);
+    //console.log(markerId.id);
     const issueSelected = findIssue(markerId.id, issueArray);
     setSelectedIssue(issueSelected);
     if (page === "HomePage") {
@@ -113,7 +113,7 @@ const Map = ({ issueArray, page }) => {
               distanceToMouse={distanceToMouse}
               onChildClick={handleSelectedIssue}
               onClick={({ x, y, lat, lng, event }) => {
-                console.log(x, y, lat, lng, event);
+                //console.log(x, y, lat, lng, event);
                 setSelectedLat(lat);
                 setSelectedLng(lng);
               }}

@@ -35,7 +35,7 @@ export default function SignIn() {
       setPassword("");
     } catch (error) {
       alert("Invalid email and password combination");
-      console.log(error);
+      //console.log(error);
     }
   };
 

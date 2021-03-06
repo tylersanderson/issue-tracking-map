@@ -69,7 +69,7 @@ export default function SignUp() {
     }
 
     validateEmail(email);
-    console.log(emailValueState);
+    //console.log(emailValueState);
 
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
@@ -79,7 +79,7 @@ export default function SignUp() {
 
       await createUserProfileDocument(user, { displayName });
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   };
 

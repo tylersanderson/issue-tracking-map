@@ -34,10 +34,10 @@ export const createIssueDocument = async (
       open: true,
     })
     .then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
+      //console.log("Document written with ID: ", docRef.id);
     })
     .catch((error) => {
-      console.error("Error adding document: ", error);
+      //console.error("Error adding document: ", error);
     });
 };
 

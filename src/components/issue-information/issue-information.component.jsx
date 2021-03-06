@@ -63,7 +63,7 @@ export default function IssueInformation({
       dialogRef.current.close();
       setNewComment("");
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
