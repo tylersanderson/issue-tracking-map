@@ -147,12 +147,6 @@ export function MyApp() {
                 <SideNavigation
                   className=""
                   collapsed={hideSideMenu}
-                  // fixedItems={
-                  //   <>
-                  //     <SideNavigationItem icon="chain-link" text="Useful Links" />
-                  //     <SideNavigationItem icon="history" text="History" />
-                  //   </>
-                  // }
                   onSelectionChange={handleMenuItemClick}
                   // slot=""
                   //style={{ minWidth: "70px", marginLeft: "5px" }}
