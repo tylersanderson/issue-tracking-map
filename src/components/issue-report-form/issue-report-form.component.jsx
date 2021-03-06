@@ -69,6 +69,7 @@ export default function IssueReportForm({ selectedLat, selectedLng }) {
     <FlexBox
       justifyContent={FlexBoxJustifyContent.Center}
       wrap={FlexBoxWrap.Wrap}
+      style={{ maxWidth: "300px" }}
     >
       <Card heading="Issue Description" style={spacing.sapUiContentPadding}>
         <FlexBox
