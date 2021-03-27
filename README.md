@@ -4,7 +4,7 @@ React app created with UI5 Web Components, Google Maps and Context API for state
 
 ## Demo
 
-[Deployed on Heroku](issue-tracking-map.herokuapp.com)
+[Deployed on Heroku](https://issue-tracking-map.herokuapp.com/)
 
 ## Built using
 
